@@ -29,7 +29,7 @@
 
     .view{display:none; min-height:100svh; position:relative}
     .view.active{display:block}
-    .fade-enter{animation:fadePage .42s ease both}
+    .fade-enter{animation:fadePage 1s ease both}
     @keyframes fadePage{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
     /* splash (poster) */
@@ -49,8 +49,8 @@
     /* level-2 menu */
     #menu{padding:80px 0 40px}
     #menu .bg{position:absolute; inset:0; overflow:hidden}
-    #menu .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(12px) saturate(115%); transform:scale(1.08)}
-    #menu .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(234,241,255,.92), rgba(217,230,255,.92)); mix-blend:normal}
+    #menu .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(6px) saturate(118%); transform:scale(1.06)}
+    #menu .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.35), rgba(220,232,255,.35)); mix-blend:normal}
     #menu .inner{position:relative}
     /* cards: one per row, centered, fill page nicely */
     .cards{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; min-height:calc(100svh - 160px)}
@@ -62,8 +62,8 @@
     /* level-3 pages */
     .page{padding:72px 0 48px}
     .page .bg{position:absolute; inset:0; overflow:hidden}
-    .page .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(14px) saturate(118%); transform:scale(1.08)}
-    .page .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(238,244,255,.95), rgba(231,242,255,.95))}
+    .page .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(8px) saturate(120%); transform:scale(1.06)}
+    .page .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.35), rgba(220,232,255,.35))}
     .page .inner{position:relative}
     .section{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:18px; box-shadow:var(--shadow); margin:10px 0}
     .section h2{margin:.2rem 0 .6rem}
@@ -303,16 +303,7 @@
           <div id="formNote" class="hint"></div>
         </form>
       </div>
-      <div class="section">
-        <h3>フォームの作り方（GitHub Pages向け）</h3>
-        <ol>
-          <li><b>Formspree</b> に無料登録 → 新規フォームを作成し、<code>https://formspree.io/f/xxxxx</code> のエンドポイントURLを取得。</li>
-          <li>このファイルの一番下にある <code>const FORM_ENDPOINT</code> を、取得したURLに置き換え。</li>
-          <li>保存してアップロード → 送信テスト。成功メッセージが出ればOK。</li>
-        </ol>
-        <p class="hint">※ 代替案：Googleフォームを作成し、ここに <code>&lt;iframe src="…"&gt;</code> で埋め込む方法もあります。</p>
       </div>
-    </div>
   </section>
 
   <footer>© 2025 聶浩軒（博士課程・東京藝術大学） / Digital Program</footer>
