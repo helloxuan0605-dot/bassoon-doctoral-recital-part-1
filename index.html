@@ -19,7 +19,7 @@
     .wrap{max-width:var(--max); margin:0 auto; padding:0 16px}
 
     /* top bar: back + lang */
-    .topbar{position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:space-between; padding:8px; z-index:50; pointer-events:none}
+    .topbar{position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:space-between; padding:8px; z-index:100; pointer-events:none}
     .btn{pointer-events:auto; display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px; border:1px solid rgba(0,0,0,.08); background:rgba(255,255,255,.85); backdrop-filter:saturate(140%) blur(8px); box-shadow:0 6px 16px rgba(0,0,0,.12); cursor:pointer}
     .btn:active{transform:translateY(1px)}
     .btn.back{visibility:hidden}
@@ -27,16 +27,16 @@
     .lang .btn{min-width:38px; justify-content:center}
     .lang .active{background:#0b1320; color:#fff}
 
-    .view{display:none; min-height:100svh}
+    .view{display:none; min-height:100svh; position:relative}
     .view.active{display:block}
+    .fade-enter{animation:fadePage .42s ease both}
+    @keyframes fadePage{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
     /* splash (poster) */
-    #splash{position:relative; color:#fff}
+    #splash{color:#fff}
     .poster{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden}
     .poster::before{content:""; position:absolute; inset:0; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(110%) contrast(105%)}
-    .poster::after{content:""; position:absolute; inset:0;
-      /* top bright, bottom darker to support text */
-      background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.72), rgba(0,0,0,.18) 46%, rgba(0,0,0,.55) 95%)}
+    .poster::after{content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.72), rgba(0,0,0,.18) 46%, rgba(0,0,0,.55) 95%)}
     .posterInner{position:relative; z-index:1; text-align:center; padding:24px; width:min(92vw,980px)}
     .logo{font-weight:700; letter-spacing:.12em; text-shadow:0 2px 20px rgba(0,0,0,.35); opacity:0; transform:translateY(10px); animation:fadeUp .9s .1s ease forwards}
     .ttl{font-size:clamp(28px, 6vw, 64px); margin:.3em 0 .2em; line-height:1.05; text-shadow:0 2px 26px rgba(0,0,0,.35); opacity:0; transform:translateY(12px); animation:fadeUp 1s .25s ease forwards}
@@ -44,40 +44,43 @@
     .meta{margin-top:16px; font-size:clamp(14px, 2.4vw, 18px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .7s ease forwards}
     .enter{margin-top:26px; opacity:0; transform:translateY(12px); animation:fadeUp 1s .9s ease forwards}
     .enter .btn{background:#fff; color:#0b1320}
-
     @keyframes fadeUp{to{opacity:1; transform:none}}
 
     /* level-2 menu */
-    #menu{position:relative; padding:80px 0 40px}
-    #menu .bg{position:absolute; inset:0;
-      background:
-        linear-gradient(180deg, rgba(234,241,255,.92), rgba(217,230,255,.92)),
-        url('assets/img/poster-bg.jpg') center/cover no-repeat;
-      filter:blur(0.6px) saturate(110%);
-    }
-    #menu .bg::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 15%, rgba(255,255,255,.45), transparent 35%), radial-gradient(circle at 80% 40%, rgba(255,255,255,.35), transparent 40%); mix-blend:overlay; opacity:.6}
+    #menu{padding:80px 0 40px}
+    #menu .bg{position:absolute; inset:0; overflow:hidden}
+    #menu .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(12px) saturate(115%); transform:scale(1.08)}
+    #menu .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(234,241,255,.92), rgba(217,230,255,.92)); mix-blend:normal}
     #menu .inner{position:relative}
-    .cards{display:grid; gap:14px; grid-template-columns:1fr 1fr}
-    @media(min-width:860px){ .cards{grid-template-columns:repeat(4,1fr)} }
-    .card{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:16px; padding:16px; box-shadow:var(--shadow); cursor:pointer; display:flex; flex-direction:column; gap:6px; min-height:120px; transition:transform .12s ease}
+    /* cards: one per row, centered, fill page nicely */
+    .cards{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; min-height:calc(100svh - 160px)}
+    .card{width:min(560px, 92vw); background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:16px; padding:20px; box-shadow:var(--shadow); cursor:pointer; display:flex; flex-direction:column; gap:6px; min-height:120px; transition:transform .12s ease}
     .card:hover{transform:translateY(-2px)}
-    .card h3{margin:0; font-size:1.06rem}
-    .card p{margin:0; color:var(--muted); font-size:.92rem}
+    .card h3{margin:0; font-size:1.12rem; text-align:center}
+    .card p{margin:0; color:var(--muted); font-size:.92rem; text-align:center}
 
     /* level-3 pages */
-    .page{padding:72px 0 48px; position:relative}
-    .page .bg{position:absolute; inset:0; background:
-      linear-gradient(180deg, rgba(238,244,255,.95), rgba(231,242,255,.95)),
-      url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(115%) blur(0.6px)}
-    .page .bg::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 15% 10%, rgba(255,255,255,.45), transparent 35%), radial-gradient(circle at 85% 60%, rgba(255,255,255,.35), transparent 40%); opacity:.55}
+    .page{padding:72px 0 48px}
+    .page .bg{position:absolute; inset:0; overflow:hidden}
+    .page .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(14px) saturate(118%); transform:scale(1.08)}
+    .page .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(238,244,255,.95), rgba(231,242,255,.95))}
     .page .inner{position:relative}
     .section{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:18px; box-shadow:var(--shadow); margin:10px 0}
     .section h2{margin:.2rem 0 .6rem}
 
-    /* placeholder blocks for images */
+    /* placeholders for images */
     .ph{height:160px; border:1px dashed rgba(20,40,80,.2); border-radius:12px; background:repeating-linear-gradient(45deg, #f1f5ff, #f1f5ff 10px, #e6eeff 10px, #e6eeff 20px); display:grid; place-items:center; color:#789; font-size:.92rem}
     .grid-2{display:grid; grid-template-columns:1fr; gap:10px}
     @media(min-width:860px){ .grid-2{grid-template-columns:1fr 1fr} }
+
+    /* form styles */
+    form{display:grid; gap:12px}
+    label{font-weight:600}
+    input, textarea, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(20,40,80,.16); font:inherit; background:#fff}
+    textarea{min-height:120px}
+    .hint{color:var(--muted); font-size:.9rem}
+    .ok{color:#1b7f2a}
+    .err{color:#a61b1b}
 
     footer{padding:24px; text-align:center; color:var(--muted)}
   </style>
@@ -127,6 +130,10 @@
           <h3 data-i18n="m_next">次回公演</h3>
           <p data-i18n="m_next_desc">テーマと概要</p>
         </div>
+        <div class="card" data-go="page-survey">
+          <h3 data-i18n="m_survey">アンケート</h3>
+          <p data-i18n="m_survey_desc">ご感想・ご提案をお寄せください</p>
+        </div>
       </div>
     </div>
   </section>
@@ -174,9 +181,7 @@
           <p><small>演奏時間：約6分半</small></p>
         </details>
       </div>
-
       <div class="section"><p style="text-align:center">— 休憩 —</p></div>
-
       <div class="section">
         <h2>第2部：アンサンブル作品</h2>
         <details class="section" open style="margin:12px 0">
@@ -200,11 +205,7 @@
           <p><small>演奏時間：約6分半</small></p>
         </details>
       </div>
-
-      <div class="section">
-        <p><strong>【演奏時間合計】</strong> 約70分（休憩含まず）</p>
-      </div>
-
+      <div class="section"><p><strong>【演奏時間合計】</strong> 約70分（休憩含まず）</p></div>
       <div class="section grid-2">
         <div class="ph">（譜面や会場写真のプレースホルダー）</div>
         <div class="ph">（譜面や会場写真のプレースホルダー）</div>
@@ -265,13 +266,73 @@
     </div>
   </section>
 
+  <!-- page: Survey -->
+  <section class="view page" id="page-survey">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <div class="section">
+        <h2>アンケート</h2>
+        <p class="hint">終演後のご感想・ご提案をお寄せください。<br>フォームの送信先は <code>FORM_ENDPOINT</code> に設定します（下の使い方を参照）。<br>連絡先：<a href="mailto:helloxuan0605@gmail.com">helloxuan0605@gmail.com</a></p>
+        <form id="surveyForm">
+          <label for="name">お名前（任意）</label>
+          <input id="name" name="name" placeholder="例：山田太郎" />
+
+          <label for="email">メール（任意）</label>
+          <input id="email" name="email" type="email" placeholder="example@mail.com" />
+
+          <label for="role">ご来場区分</label>
+          <select id="role" name="role">
+            <option value="audience">一般来場</option>
+            <option value="student">在校生</option>
+            <option value="performer">関係者</option>
+          </select>
+
+          <label for="rating">本日の満足度</label>
+          <select id="rating" name="rating">
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★</option>
+            <option value="3">★★★</option>
+            <option value="2">★★</option>
+            <option value="1">★</option>
+          </select>
+
+          <label for="msg">ご感想・ご提案</label>
+          <textarea id="msg" name="message" placeholder="自由にお書きください"></textarea>
+
+          <button class="btn" type="submit">送信</button>
+          <div id="formNote" class="hint"></div>
+        </form>
+      </div>
+      <div class="section">
+        <h3>フォームの作り方（GitHub Pages向け）</h3>
+        <ol>
+          <li><b>Formspree</b> に無料登録 → 新規フォームを作成し、<code>https://formspree.io/f/xxxxx</code> のエンドポイントURLを取得。</li>
+          <li>このファイルの一番下にある <code>const FORM_ENDPOINT</code> を、取得したURLに置き換え。</li>
+          <li>保存してアップロード → 送信テスト。成功メッセージが出ればOK。</li>
+        </ol>
+        <p class="hint">※ 代替案：Googleフォームを作成し、ここに <code>&lt;iframe src="…"&gt;</code> で埋め込む方法もあります。</p>
+      </div>
+    </div>
+  </section>
+
   <footer>© 2025 聶浩軒（博士課程・東京藝術大学） / Digital Program</footer>
 
   <script>
-    /* SPA state */
-    const views=["splash","menu","page-severud","page-program","page-performers","page-next"]; let historyStack=["splash"]; let current="splash";
+    /* SPA state with fade-in */
+    const views=["splash","menu","page-severud","page-program","page-performers","page-next","page-survey"];
+    let historyStack=["splash"]; let current="splash";
     const $=s=>document.querySelector(s);
-    function show(id){ views.forEach(v=>document.getElementById(v).classList.remove('active')); document.getElementById(id).classList.add('active'); current=id; $('#backBtn').style.visibility=(id==="splash")?"hidden":"visible"; window.scrollTo({top:0, behavior:'instant'}); }
+    function show(id){
+      views.forEach(v=>document.getElementById(v).classList.remove('active'));
+      const el=document.getElementById(id);
+      el.classList.add('active');
+      // add fade enter
+      el.classList.remove('fade-enter');
+      void el.offsetWidth; // reflow to restart animation
+      el.classList.add('fade-enter');
+      current=id; $('#backBtn').style.visibility=(id==="splash")?"hidden":"visible";
+      window.scrollTo({top:0, behavior:'instant'});
+    }
     function go(id){ historyStack.push(id); show(id); }
     function back(){ if(historyStack.length>1){ historyStack.pop(); show(historyStack.at(-1)); } }
 
@@ -283,11 +344,11 @@
     /* i18n (headings/UI only; body paragraphs are JP for now) */
     const dict={
       ja:{ back:"戻る", logo:"第一回 聶浩軒 ファゴット博士リサイタル", title:"抗う音、芽吹く", subtitle:"ハーラル・セーヴェルー / 作風変容の軌跡【前編】", meta:"日時：2025年12月2日（火）18:00–21:00｜会場：東京藝術大学 第6ホール", enter:"タップして続く",
-        m_severud:"セーヴェルー紹介", m_severud_desc:"リサイタルの主旨と背景", m_program:"プログラム解説", m_program_desc:"各曲の背景・構造・聴きどころ", m_performers:"出演者", m_performers_desc:"プロフィールとスタッフ", m_next:"次回公演", m_next_desc:"テーマと概要" },
+        m_severud:"セーヴェルー紹介", m_severud_desc:"リサイタルの主旨と背景", m_program:"プログラム解説", m_program_desc:"各曲の背景・構造・聴きどころ", m_performers:"出演者", m_performers_desc:"プロフィールとスタッフ", m_next:"次回公演", m_next_desc:"テーマと概要", m_survey:"アンケート", m_survey_desc:"ご感想・ご提案をお寄せください" },
       zh:{ back:"返回", logo:"第一回 聶浩軒 巴松博士独奏会", title:"抗う音、芽吹く", subtitle:"哈拉尔·塞弗鲁德 / 作风变容的轨迹【前篇】", meta:"日期：2025年12月2日（周二）18:00–21:00｜地点：东京艺术大学 第6大厅", enter:"点击进入",
-        m_severud:"塞弗鲁德介绍", m_severud_desc:"音乐会宗旨与背景", m_program:"节目单介绍", m_program_desc:"每首作品的背景与结构", m_performers:"出演人员", m_performers_desc:"简介与工作人员", m_next:"下次演出", m_next_desc:"主题与概要" },
+        m_severud:"塞弗鲁德介绍", m_severud_desc:"音乐会宗旨与背景", m_program:"节目单介绍", m_program_desc:"作品背景与结构", m_performers:"出演人员", m_performers_desc:"简介与工作人员", m_next:"下次演出", m_next_desc:"主题与概要", m_survey:"问卷", m_survey_desc:"欢迎反馈建议" },
       en:{ back:"Back", logo:"Dr. Bassoon Recital I — Haoxuan Nie", title:"Resisting Sound, Budding", subtitle:"Harald Sæverud / Traces of Stylistic Change [Part I]", meta:"Tue, Dec 2, 2025 · 18:00–21:00 · Tokyo University of the Arts, Hall 6", enter:"Tap to enter",
-        m_severud:"About / Context", m_severud_desc:"Recital concept & background", m_program:"Program Notes", m_program_desc:"Background, structure, listening cues", m_performers:"Performers", m_performers_desc:"Profiles & Staff", m_next:"Next Recital", m_next_desc:"Theme & overview" }
+        m_severud:"About / Context", m_severud_desc:"Recital concept & background", m_program:"Program Notes", m_program_desc:"Background, structure, listening cues", m_performers:"Performers", m_performers_desc:"Profiles & Staff", m_next:"Next Recital", m_next_desc:"Theme & overview", m_survey:"Survey", m_survey_desc:"Share your thoughts" }
     };
     let lang='ja';
     function applyLang(){ document.querySelectorAll('[data-i18n]').forEach(el=>{ const t=dict[lang][el.dataset.i18n]; if(t!==undefined) el.textContent=t; }); document.querySelectorAll('.lang .btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang)); }
@@ -296,6 +357,19 @@
 
     // deep link ?v=menu
     const url=new URL(location.href); const v=url.searchParams.get('v'); if(v && views.includes(v)){ historyStack=[v]; show(v); } else { show('splash'); }
+
+    /* simple form submit (Formspree-ready) */
+    const FORM_ENDPOINT = "https://formspree.io/f/your-id"; // ← ここを差し替え
+    const sf=document.getElementById('surveyForm');
+    const note=document.getElementById('formNote');
+    sf?.addEventListener('submit', async (e)=>{
+      e.preventDefault(); note.textContent='送信中…'; note.className='hint';
+      try{
+        const fd=new FormData(sf); const res=await fetch(FORM_ENDPOINT,{method:'POST', body:fd, headers:{'Accept':'application/json'}});
+        if(res.ok){ note.textContent='ありがとうございます。送信されました。'; note.className='hint ok'; sf.reset(); }
+        else{ note.textContent='送信に失敗しました。数分後に再度お試しください。'; note.className='hint err'; }
+      }catch(err){ note.textContent='ネットワークエラー。後ほどお試しください。'; note.className='hint err'; }
+    });
   </script>
 </body>
 </html>
