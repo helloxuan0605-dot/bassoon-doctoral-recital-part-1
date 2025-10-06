@@ -1,150 +1,301 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="ja">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>聶浩軒 第一回ファゴット博士リサイタル｜抗う音、芽吹く｜Digital Program</title>
-  <meta name="description" content="聶浩軒ファゴット博士リサイタル（2025/12/02 Hall 6）。节目单｜Program｜電子プログラム" />
-  <!-- 可选：Google Fonts（上线后自动加载；本地预览也可） -->
+  <title>聶浩軒 第一回ファゴット博士リサイタル｜抗う音、芽吹く</title>
+  <meta name="description" content="ポスター → 二級メニュー → 三级ページ（言語切替・戻る）。モバイル先行。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --max: 900px; }
-    html,body { margin:0; font-family: "Noto Sans", system-ui, -apple-system, Arial, "Hiragino Sans", "Microsoft YaHei", sans-serif; color:#111; background:#fff; }
-    header { padding:2.2rem 1.2rem 1rem; border-bottom:1px solid #eee; }
-    main { padding:1.2rem; }
-    .wrap { max-width: var(--max); margin: 0 auto; }
-    h1 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); margin: 0 0 .4rem; }
-    h2 { font-size: clamp(1.2rem, 2.8vw, 1.6rem); margin: 2rem 0 .6rem; }
-    h3 { font-size: clamp(1.05rem, 2.3vw, 1.2rem); margin: 1.2rem 0 .4rem; }
-    p, li { line-height: 1.7; font-size: 1rem; }
-    .meta { color:#555; margin:.2rem 0 0; }
-    .badge { display:inline-block; font-size:.86rem; padding:.2rem .5rem; border:1px solid #ddd; border-radius:.4rem; margin-right:.4rem; }
-    nav { margin: .8rem 0 0; }
-    nav a { margin-right: .8rem; text-decoration:none; color:#0a58ca; }
-    section { padding: .8rem 0; border-top:1px dashed #eee; }
-    .two-col { display:grid; grid-template-columns: 1fr; gap:1rem; }
-    @media(min-width: 780px){ .two-col { grid-template-columns: 1fr 1fr; } }
-    .list { padding-left: 1.1rem; }
-    .small { font-size:.92rem; color:#555; }
-    footer { border-top:1px solid #eee; margin-top:2rem; padding:1.2rem; color:#666; font-size:.92rem; }
-    /* 打印样式：隐藏导航，简化颜色，页边距友好 */
-    @media print {
-      nav, .badge, .web-only { display:none !important; }
-      a { color:#000; text-decoration:none; }
-      body { font-size: 12pt; }
-      header, footer { border:none; }
+    :root{
+      --ink:#0b1320; --bg:#eaf1ff; --muted:#5a6a87; --card:#fff; --brand:#2f6fff;
+      --radius:18px; --max:980px; --shadow:0 12px 30px rgba(10,20,40,.18);
     }
+    html,body{margin:0; font-family:"Noto Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,"Hiragino Sans","Yu Gothic","Microsoft YaHei",sans-serif; color:var(--ink); background:var(--bg)}
+    *{box-sizing:border-box}
+    a{color:var(--brand); text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 16px}
+
+    /* top bar: back + lang */
+    .topbar{position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:space-between; padding:8px; z-index:50; pointer-events:none}
+    .btn{pointer-events:auto; display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px; border:1px solid rgba(0,0,0,.08); background:rgba(255,255,255,.85); backdrop-filter:saturate(140%) blur(8px); box-shadow:0 6px 16px rgba(0,0,0,.12); cursor:pointer}
+    .btn:active{transform:translateY(1px)}
+    .btn.back{visibility:hidden}
+    .lang{display:inline-flex; gap:6px}
+    .lang .btn{min-width:38px; justify-content:center}
+    .lang .active{background:#0b1320; color:#fff}
+
+    .view{display:none; min-height:100svh}
+    .view.active{display:block}
+
+    /* splash (poster) */
+    #splash{position:relative; color:#fff}
+    .poster{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden}
+    .poster::before{content:""; position:absolute; inset:0; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(110%) contrast(105%)}
+    .poster::after{content:""; position:absolute; inset:0;
+      /* top bright, bottom darker to support text */
+      background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.72), rgba(0,0,0,.18) 46%, rgba(0,0,0,.55) 95%)}
+    .posterInner{position:relative; z-index:1; text-align:center; padding:24px; width:min(92vw,980px)}
+    .logo{font-weight:700; letter-spacing:.12em; text-shadow:0 2px 20px rgba(0,0,0,.35); opacity:0; transform:translateY(10px); animation:fadeUp .9s .1s ease forwards}
+    .ttl{font-size:clamp(28px, 6vw, 64px); margin:.3em 0 .2em; line-height:1.05; text-shadow:0 2px 26px rgba(0,0,0,.35); opacity:0; transform:translateY(12px); animation:fadeUp 1s .25s ease forwards}
+    .sub{font-size:clamp(16px, 2.8vw, 24px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .5s ease forwards}
+    .meta{margin-top:16px; font-size:clamp(14px, 2.4vw, 18px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .7s ease forwards}
+    .enter{margin-top:26px; opacity:0; transform:translateY(12px); animation:fadeUp 1s .9s ease forwards}
+    .enter .btn{background:#fff; color:#0b1320}
+
+    @keyframes fadeUp{to{opacity:1; transform:none}}
+
+    /* level-2 menu */
+    #menu{position:relative; padding:80px 0 40px}
+    #menu .bg{position:absolute; inset:0;
+      background:
+        linear-gradient(180deg, rgba(234,241,255,.92), rgba(217,230,255,.92)),
+        url('assets/img/poster-bg.jpg') center/cover no-repeat;
+      filter:blur(0.6px) saturate(110%);
+    }
+    #menu .bg::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 15%, rgba(255,255,255,.45), transparent 35%), radial-gradient(circle at 80% 40%, rgba(255,255,255,.35), transparent 40%); mix-blend:overlay; opacity:.6}
+    #menu .inner{position:relative}
+    .cards{display:grid; gap:14px; grid-template-columns:1fr 1fr}
+    @media(min-width:860px){ .cards{grid-template-columns:repeat(4,1fr)} }
+    .card{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:16px; padding:16px; box-shadow:var(--shadow); cursor:pointer; display:flex; flex-direction:column; gap:6px; min-height:120px; transition:transform .12s ease}
+    .card:hover{transform:translateY(-2px)}
+    .card h3{margin:0; font-size:1.06rem}
+    .card p{margin:0; color:var(--muted); font-size:.92rem}
+
+    /* level-3 pages */
+    .page{padding:72px 0 48px; position:relative}
+    .page .bg{position:absolute; inset:0; background:
+      linear-gradient(180deg, rgba(238,244,255,.95), rgba(231,242,255,.95)),
+      url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(115%) blur(0.6px)}
+    .page .bg::after{content:""; position:absolute; inset:0; background:radial-gradient(circle at 15% 10%, rgba(255,255,255,.45), transparent 35%), radial-gradient(circle at 85% 60%, rgba(255,255,255,.35), transparent 40%); opacity:.55}
+    .page .inner{position:relative}
+    .section{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:18px; box-shadow:var(--shadow); margin:10px 0}
+    .section h2{margin:.2rem 0 .6rem}
+
+    /* placeholder blocks for images */
+    .ph{height:160px; border:1px dashed rgba(20,40,80,.2); border-radius:12px; background:repeating-linear-gradient(45deg, #f1f5ff, #f1f5ff 10px, #e6eeff 10px, #e6eeff 20px); display:grid; place-items:center; color:#789; font-size:.92rem}
+    .grid-2{display:grid; grid-template-columns:1fr; gap:10px}
+    @media(min-width:860px){ .grid-2{grid-template-columns:1fr 1fr} }
+
+    footer{padding:24px; text-align:center; color:var(--muted)}
   </style>
-  <!-- 结构化数据（可修改内容后保留） -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "MusicEvent",
-    "name": "聶浩軒 第一回ファゴット博士リサイタル「抗う音、芽吹く」",
-    "startDate": "2025-12-02T19:00:00+09:00",
-    "endDate": "2025-12-02T21:00:00+09:00",
-    "eventStatus": "https://schema.org/EventScheduled",
-    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-    "location": {
-      "@type": "Place",
-      "name": "東京藝術大学 第六ホール（Hall 6）",
-      "address": "Tokyo University of the Arts, Hall 6, Tokyo, Japan"
-    },
-    "performer": [{
-      "@type": "Person",
-      "name": "聶 浩軒（ファゴット）"
-    }],
-    "description": "電子プログラム / Digital Program",
-    "inLanguage": ["ja","zh-CN","en"]
-  }
-  </script>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <h1>聶浩軒 第一回ファゴット博士リサイタル｜<span class="small">抗う音、芽吹く</span></h1>
-      <p class="meta">2025年12月2日（火）19:00 開演（18:30 開場）｜東京藝術大学 第六ホール（Hall 6）</p>
-      <p><span class="badge">JP</span><span class="badge">ZH</span><span class="badge">EN</span>
-         <span class="badge web-only">スマホで見やすい｜Mobile-friendly</span></p>
-      <nav class="web-only">
-        <a href="#jp">日本語</a>
-        <a href="#zh">中文</a>
-        <a href="#en">English</a>
-        <a href="#program">Program</a>
-        <a href="#notes">Notes</a>
-        <a href="#bio">Profile</a>
-      </nav>
+  <!-- top bar -->
+  <div class="topbar">
+    <button class="btn back" id="backBtn"><span>←</span><span data-i18n="back">戻る</span></button>
+    <div class="lang" role="group" aria-label="language">
+      <button class="btn active" data-lang="ja">日</button>
+      <button class="btn" data-lang="zh">中</button>
+      <button class="btn" data-lang="en">EN</button>
     </div>
-  </header>
+  </div>
 
-  <main class="wrap">
-    <section id="program">
-      <h2>Program｜节目单｜プログラム</h2>
-      <ul class="list">
-        <li><strong>Harald Sæverud</strong>: <em>Oboe Concerto, Op.12</em>（抜粋 / Excerpts）— *for context*</li>
-        <li><strong>Harald Sæverud</strong>: <em>Bassoon Concerto, Op.44</em>（改訂版 / Revised version）</li>
-        <li>（休憩 Intermission 15’）</li>
-        <li>Encore（当日告知 / Announced on site）</li>
-      </ul>
-      <p class="small">※ 曲目・曲順はやむを得ない事情により変更となる場合があります。</p>
-    </section>
+  <!-- splash -->
+  <section class="view active" id="splash">
+    <div class="poster" id="enterPoster">
+      <div class="posterInner">
+        <div class="logo" data-i18n="logo">第一回 聶浩軒 ファゴット博士リサイタル</div>
+        <div class="ttl" data-i18n="title">抗う音、芽吹く</div>
+        <div class="sub" data-i18n="subtitle">ハーラル・セーヴェルー / 作風変容の軌跡【前編】</div>
+        <div class="meta" data-i18n="meta">日時：2025年12月2日（火）18:00–21:00｜会場：東京藝術大学 第6ホール</div>
+        <div class="enter"><button class="btn" id="enterBtn" data-i18n="enter">タップして続く</button></div>
+      </div>
+    </div>
+  </section>
 
-    <section id="jp">
-      <h2>ご案内（日本語）</h2>
-      <p>本公演は、第二次世界大戦期におけるハーラル・セーヴェルーの作曲様式の変容と「抵抗」の表現をテーマに…（本文を入れてください）。</p>
-      <div class="two-col">
-        <div>
-          <h3>出演</h3>
-          <ul class="list">
-            <li>聶 浩軒（ファゴット）</li>
-            <li>ピアノ：◯◯ ◯◯</li>
-            <li>室内オーケストラ（終曲）</li>
-          </ul>
+  <!-- level-2 menu -->
+  <section class="view" id="menu">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <div class="cards">
+        <div class="card" data-go="page-severud">
+          <h3 data-i18n="m_severud">セーヴェルー紹介</h3>
+          <p data-i18n="m_severud_desc">リサイタルの主旨と背景</p>
         </div>
-        <div>
-          <h3>公演情報</h3>
-          <ul class="list">
-            <li>日時：2025年12月2日（火）19:00 開演</li>
-            <li>会場：東京藝術大学 第六ホール（Hall 6）</li>
-            <li>上演時間：約120分（休憩含む）</li>
-          </ul>
+        <div class="card" data-go="page-program">
+          <h3 data-i18n="m_program">プログラム解説</h3>
+          <p data-i18n="m_program_desc">各曲の背景・構造・聴きどころ</p>
+        </div>
+        <div class="card" data-go="page-performers">
+          <h3 data-i18n="m_performers">出演者</h3>
+          <p data-i18n="m_performers_desc">プロフィールとスタッフ</p>
+        </div>
+        <div class="card" data-go="page-next">
+          <h3 data-i18n="m_next">次回公演</h3>
+          <p data-i18n="m_next_desc">テーマと概要</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="zh">
-      <h2>中文信息</h2>
-      <p>本场音乐会以“抵抗之声、萌发”为题，聚焦挪威作曲家哈拉尔·塞弗鲁德在战时的风格变化与抵抗性书写…（请替换正文）。</p>
-      <ul class="list">
-        <li>时间：2025-12-02（周二）19:00（18:30入场）</li>
-        <li>地点：东京艺术大学 六号厅（Hall 6）</li>
-        <li>时长：约120分钟（含中场休息）</li>
-      </ul>
-    </section>
+  <!-- page: Severud / concept -->
+  <section class="view page" id="page-severud">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <div class="section">
+        <h2>聶浩軒 第一回博士リサイタル</h2>
+        <p>《抗う音、芽吹く》</p>
+        <p>日時：2025年12月2日（火）18:00〜21:00／会場：東京藝術大学 第6ホール<br>ゲネプロ：2025年12月1日（月）18:00〜21:00</p>
+      </div>
+      <div class="section">
+        <p>本リサイタルは、ノルウェーの作曲家ハーラル・セーヴェルー（Harald Sæverud）の戦前および戦中の代表的な作品を通じて、その作曲スタイルの変遷を探ることを目的としています。プログラムはほとんど作曲年代順に構成されており、前半はファゴット独奏作品、後半はアンサンブル作品を中心に展開します。<br><br>1930年代末、セーヴェルーは自然に囲まれた環境で創作活動を行うため、ベルゲン郊外へ引っ越しました。その地域には猫柳が多く見られたため、自宅を「シーリューステール（猫柳荘園）」と名付けました。しかし引っ越して間もなく、ノルウェーは第二次世界大戦に巻き込まれました。セーヴェルーはシーリューステールを創作の拠点とし、音楽によってナチスへの抵抗を表現すると同時に、独自の作曲スタイルを確立しました。セーヴェルーがどのようにしてこの成熟したスタイルへと至ったのか、本リサイタルを通じて表現したいと思います。</p>
+      </div>
+      <div class="section">
+        <div class="grid-2">
+          <div class="ph">（写真プレースホルダー）</div>
+          <div class="ph">（写真プレースホルダー）</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="en">
-      <h2>English</h2>
-      <p>This recital explores Harald Sæverud’s wartime style and the musical idea of “resistance,” featuring the Bassoon Concerto Op.44… (replace with your copy).</p>
-      <ul class="list">
-        <li>Tue, Dec 2, 2025, 7:00 PM (doors 6:30 PM)</li>
-        <li>Tokyo University of the Arts, Hall 6</li>
-        <li>Approx. 120 minutes incl. intermission</li>
-      </ul>
-    </section>
+  <!-- page: Program -->
+  <section class="view page" id="page-program">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <div class="section">
+        <h2>【プログラム】第1部：ファゴット独奏作品</h2>
+        <details class="section" open style="margin:12px 0">
+          <summary><b>Cello Concerto, Op.7</b>（ファゴットとピアノ）</summary>
+          <p>セーヴェルーの初期作品で、不協和音や無調性を多く用い、自らの作曲の方向性を模索していた時期の作品です。5つの協奏曲の中で最も初期のものであり、作曲者自身も完成に満足できず遺稿として残しました。セーヴェルーの死後、作曲家兼ファゴット奏者であるロベルト・ロンネス（Robert Rønnes）が補筆・完成しました。</p>
+          <p><small>演奏時間：約26分</small></p>
+        </details>
+        <details class="section" style="margin:12px 0">
+          <summary><b>Divertimento, Op.13, No.1</b>（ファゴットと弦楽）</summary>
+          <p>鋭い不協和音やリズムの断片を残しつつも、調性や音色の面で次第に柔和さが増してくる時期の作品です。</p>
+          <p><small>演奏時間：約14分</small></p>
+        </details>
+        <details class="section" style="margin:12px 0">
+          <summary><b>Romanza, Op.23a</b>（ファゴットとピアノ）</summary>
+          <p>戦時中に作曲された作品で、穏やかな旋律が印象的です。厳しい戦争の中でもロマンティックな日常の美しさを忘れないという想いが込められています。</p>
+          <p><small>演奏時間：約6分半</small></p>
+        </details>
+      </div>
 
-    <section id="notes">
-      <h2>Program Notes｜曲目解说｜曲目解説</h2>
-      <p>（在此放入每首曲目的解说，可分小节：作曲背景、结构、主题动机、演奏提示）</p>
-    </section>
+      <div class="section"><p style="text-align:center">— 休憩 —</p></div>
 
-    <section id="bio">
-      <h2>Profile｜简介｜プロフィール</h2>
-      <p>（在此放置演奏者与协演者简介、致谢、制作人员、参考文献/唱片等）</p>
-    </section>
-  </main>
+      <div class="section">
+        <h2>第2部：アンサンブル作品</h2>
+        <details class="section" open style="margin:12px 0">
+          <summary><b>Rondo Amoroso, Op.14</b>（木管五重奏）</summary>
+          <p>母親に捧げられた作品です。戦争の影響がまだ浅かった頃のシーリューステールの穏やかな日常が描かれています。</p>
+          <p><small>演奏時間：約5分</small></p>
+        </details>
+        <details class="section" style="margin:12px 0">
+          <summary><b>Blåsekvintett nr.1, Op.21a</b>（木管五重奏）</summary>
+          <p>《Siljustølの歌と舞》第1集より。戦争によってセーヴェルーの民族的自覚が高まり、ノルウェー民謡の旋律や自然への賛美が色濃く表現された作品です。</p>
+          <p><small>演奏時間：約13分</small></p>
+        </details>
+        <details class="section" style="margin:12px 0">
+          <summary><b>På kingelvevstrenger, Op.22-4</b>（ピアノ独奏）</summary>
+          <p>《Siljustølの歌と舞》第2集より。タイトルは「蜘蛛の糸の上で」を意味し、戦時下のノルウェーの不安定な状況を象徴的に表現しています。</p>
+          <p><small>演奏時間：約1分</small></p>
+        </details>
+        <details class="section" style="margin:12px 0">
+          <summary><b>Kjempeviseslåtten, Op.22-5</b></summary>
+          <p>《Siljustølの歌と舞》第2集より、「蜘蛛の糸の上で」から続けて演奏されます。「抵抗のバラード」として知られ、祖国防衛の英雄たちに捧げられています。困難な時代を生き抜くための希望と決意が表現されています。</p>
+          <p><small>演奏時間：約6分半</small></p>
+        </details>
+      </div>
 
-  <footer class="wrap">
-    <p>© 2025 聶浩軒（博士課程・東京藝術大学）｜本页将随演出日更新安可与变更信息。</p>
-  </footer>
+      <div class="section">
+        <p><strong>【演奏時間合計】</strong> 約70分（休憩含まず）</p>
+      </div>
+
+      <div class="section grid-2">
+        <div class="ph">（譜面や会場写真のプレースホルダー）</div>
+        <div class="ph">（譜面や会場写真のプレースホルダー）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- page: Performers -->
+  <section class="view page" id="page-performers">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <div class="section">
+        <h2>【演奏者】</h2>
+        <ul>
+          <li>ファゴット：聶浩軒</li>
+          <li>ピアノ：横山希（ヨコヤマノゾミ）</li>
+          <li>フルート：藤枝麻里花（院1年）（フジエダマリカ）</li>
+          <li>オーボエ：古川瑞記（4年）（フルガワミズキ）</li>
+          <li>クラリネット：眞塩由希子（院2年）（マシオユキコ）</li>
+          <li>ホルン：直田真潮（院2年）（ナオタマシオ）</li>
+          <li>ヴァイオリン：笠井文昭（院1年）（カサイフミアキ）</li>
+          <li>ヴィオラ：由井ひまり（院2年）（ユイヒマリ）</li>
+          <li>チェロ：谷川萌音（学部4年）（タニカワモネ）</li>
+          <li>コントラバス：山内果連（学部3年）（ヤマウチカレン）</li>
+          <li>編曲：田村薫（タムラカオル）</li>
+          <li>チラシデザイン：由井ひまり（ユイヒマリ）</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h3>スタッフ</h3>
+        <ul>
+          <li>今村光流（ユーフォニアム科2年）（イマムラコウリュウ）</li>
+          <li>北折衣晴（オーボエ科1年）（キタオリコハル）</li>
+          <li>田中陽菜（オーボエ科2年）（タナカヒナ）</li>
+          <li>篠原楓（ホルン科2年）（シノハラカエデ）</li>
+          <li>奈良彩葉（ホルン科2年）（ナラアヤハ）</li>
+        </ul>
+      </div>
+      <div class="section grid-2">
+        <div class="ph">（出演写真プレースホルダー）</div>
+        <div class="ph">（出演写真プレースホルダー）</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- page: Next recital -->
+  <section class="view page" id="page-next">
+    <div class="bg" aria-hidden="true"></div>
+    <div class="wrap inner">
+      <div class="section">
+        <h2>第2回博士リサイタル「抗う音、根付く」</h2>
+        <p>戦後の作品を中心に、戦時作品と同様の「レジスタンス性」の特徴を持つ楽曲を取り上げる予定であり、セーヴェルーの作曲スタイルを「レジスタンス」という視点から更に掘り下げて検討します。</p>
+      </div>
+      <div class="section grid-2">
+        <div class="ph">（次回公演ビジュアルのプレースホルダー）</div>
+        <div class="ph">（次回公演ビジュアルのプレースホルダー）</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2025 聶浩軒（博士課程・東京藝術大学） / Digital Program</footer>
+
+  <script>
+    /* SPA state */
+    const views=["splash","menu","page-severud","page-program","page-performers","page-next"]; let historyStack=["splash"]; let current="splash";
+    const $=s=>document.querySelector(s);
+    function show(id){ views.forEach(v=>document.getElementById(v).classList.remove('active')); document.getElementById(id).classList.add('active'); current=id; $('#backBtn').style.visibility=(id==="splash")?"hidden":"visible"; window.scrollTo({top:0, behavior:'instant'}); }
+    function go(id){ historyStack.push(id); show(id); }
+    function back(){ if(historyStack.length>1){ historyStack.pop(); show(historyStack.at(-1)); } }
+
+    $('#enterBtn').addEventListener('click', ()=>go('menu'));
+    $('#enterPoster').addEventListener('click', e=>{ if(e.target.id!=="enterBtn") go('menu'); });
+    $('#backBtn').addEventListener('click', back);
+    document.querySelectorAll('#menu .card').forEach(c=>c.addEventListener('click', ()=>go(c.dataset.go)));
+
+    /* i18n (headings/UI only; body paragraphs are JP for now) */
+    const dict={
+      ja:{ back:"戻る", logo:"第一回 聶浩軒 ファゴット博士リサイタル", title:"抗う音、芽吹く", subtitle:"ハーラル・セーヴェルー / 作風変容の軌跡【前編】", meta:"日時：2025年12月2日（火）18:00–21:00｜会場：東京藝術大学 第6ホール", enter:"タップして続く",
+        m_severud:"セーヴェルー紹介", m_severud_desc:"リサイタルの主旨と背景", m_program:"プログラム解説", m_program_desc:"各曲の背景・構造・聴きどころ", m_performers:"出演者", m_performers_desc:"プロフィールとスタッフ", m_next:"次回公演", m_next_desc:"テーマと概要" },
+      zh:{ back:"返回", logo:"第一回 聶浩軒 巴松博士独奏会", title:"抗う音、芽吹く", subtitle:"哈拉尔·塞弗鲁德 / 作风变容的轨迹【前篇】", meta:"日期：2025年12月2日（周二）18:00–21:00｜地点：东京艺术大学 第6大厅", enter:"点击进入",
+        m_severud:"塞弗鲁德介绍", m_severud_desc:"音乐会宗旨与背景", m_program:"节目单介绍", m_program_desc:"每首作品的背景与结构", m_performers:"出演人员", m_performers_desc:"简介与工作人员", m_next:"下次演出", m_next_desc:"主题与概要" },
+      en:{ back:"Back", logo:"Dr. Bassoon Recital I — Haoxuan Nie", title:"Resisting Sound, Budding", subtitle:"Harald Sæverud / Traces of Stylistic Change [Part I]", meta:"Tue, Dec 2, 2025 · 18:00–21:00 · Tokyo University of the Arts, Hall 6", enter:"Tap to enter",
+        m_severud:"About / Context", m_severud_desc:"Recital concept & background", m_program:"Program Notes", m_program_desc:"Background, structure, listening cues", m_performers:"Performers", m_performers_desc:"Profiles & Staff", m_next:"Next Recital", m_next_desc:"Theme & overview" }
+    };
+    let lang='ja';
+    function applyLang(){ document.querySelectorAll('[data-i18n]').forEach(el=>{ const t=dict[lang][el.dataset.i18n]; if(t!==undefined) el.textContent=t; }); document.querySelectorAll('.lang .btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang)); }
+    document.querySelectorAll('.lang .btn').forEach(b=>b.addEventListener('click',()=>{ lang=b.dataset.lang; applyLang(); }));
+    applyLang();
+
+    // deep link ?v=menu
+    const url=new URL(location.href); const v=url.searchParams.get('v'); if(v && views.includes(v)){ historyStack=[v]; show(v); } else { show('splash'); }
+  </script>
 </body>
 </html>
