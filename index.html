@@ -17,11 +17,12 @@
     $1
 
     /* Global poster background element (covers entire app incl. footer) */
-    #globalBg{position:fixed; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(7px) saturate(118%); transform:scale(1.06); z-index:-2}
-    #globalBg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.26), rgba(220,232,255,.26))}
+    #bgPoster{position:fixed; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(115%); transform:scale(1.06); z-index:-2}
+    #bgPoster::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.18) 70%, rgba(0,0,0,.35))}
+    #glass{position:fixed; inset:0; background:rgba(255,255,255,.22); backdrop-filter:blur(6px) saturate(120%); z-index:-1; opacity:0; pointer-events:none; transition:opacity .25s ease}
 
     /* Consistent frosted layer for every view */
-    .view::before{content:""; position:absolute; inset:0; backdrop-filter:blur(3.5px) saturate(118%); z-index:0}
+    
     .view .inner, .view .posterInner, .view .wrap{position:relative; z-index:1}
 
     /* 全ページにポスター背景（フッターまで含む） */
@@ -84,6 +85,9 @@
 
     footer{padding:28px 16px; text-align:center; color:var(--muted); font-size:.95rem}
 
+    /* glass toggle */
+    body.glass-on #glass{opacity:1}
+
     /* survey form */
     form{display:grid; gap:12px}
     label{font-weight:700}
@@ -94,7 +98,8 @@
   </style>
 </head>
 <body>
-  <div id="globalBg"></div>
+  <div id="bgPoster"></div>
+  <div id="glass"></div>
   <!-- top bar -->
   <div class="topbar">
     <button class="btn back" id="backBtn"><span>←</span><span>戻る</span></button>
@@ -298,6 +303,7 @@
       el.classList.add('active');
       el.classList.remove('fade-enter'); void el.offsetWidth; el.classList.add('fade-enter');
       current=id; $('#backBtn').style.visibility=(id==="splash")?"hidden":"visible";
+      document.body.classList.toggle('glass-on', id!=="splash");
       window.scrollTo({top:0, behavior:'instant'});
     }
     function go(id){ historyStack.push(id); show(id); }
