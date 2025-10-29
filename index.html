@@ -92,6 +92,21 @@
     .note-ok{color:#1b7f2a}
     .note-err{color:#a61b1b}
   </style>
+  <style>
+    /* Splash (first view) — force all text to pure white */
+    #splash .posterInner,
+    #splash .logo,
+    #splash .ttl,
+    #splash .sub,
+    #splash .meta{ color:#fff !important; }
+
+    /* Make the entry button white-on-transparent to match */
+    #splash .enter .btn{
+      background:transparent; color:#fff; border:1px solid rgba(255,255,255,.8);
+      box-shadow:0 8px 22px rgba(0,0,0,.35);
+    }
+    #splash .enter .btn:hover{ filter:brightness(1.05); }
+  </style>
 </head>
 <body>
   <!-- Frosted overlay -->
