@@ -7,30 +7,40 @@
   <meta name="description" content="ポスター → 二級メニュー → 三级ページ（戻るボタン・フェード・日本語版）。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&family=Noto+Serif+JP:wght@500;700;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --ink:#0b1320; --bg:#eaf1ff; --muted:#5a6a87; --card:#fff; --brand:#2f6fff;
-      --radius:18px; --max:980px; --shadow:0 12px 30px rgba(10,20,40,.18);
+      --ink:#0b1320; --muted:#5a6a87; --card:#ffffff; --brand:#2f6fff;
+      --radius:18px; --max:980px; --shadow:0 14px 34px rgba(10,20,40,.18);
+      --paper-shadow:0 10px 28px rgba(10,20,40,.16);
+      --heading:#eef3ff; /* 見出し（ポスター風のやや白藍） */
+      --sub:#e5ecff;     /* サブ見出し */
     }
-    html,body{$1background:transparent; text-decoration:none}
-    $1
+    html{min-height:100%;
+      background-image:
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.35)),
+        url('assets/img/poster-bg.jpg');
+      background-size:cover, cover; background-position:center, center;
+      background-attachment:fixed, fixed; background-repeat:no-repeat, no-repeat;
+    }
+    body{margin:0; font-family:"Noto Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,"Hiragino Sans","Yu Gothic","Microsoft YaHei",sans-serif; color:var(--ink); background:transparent}
+    *{box-sizing:border-box}
+    a{color:var(--brand); text-decoration:none}
 
-    /* Global poster background element (covers entire app incl. footer) */
-    #bgPoster{position:fixed; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(115%); transform:scale(1.06); z-index:-2}
-    #bgPoster::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.18) 70%, rgba(0,0,0,.35))}
-    #glass{position:fixed; inset:0; background:rgba(255,255,255,.22); backdrop-filter:blur(6px) saturate(120%); z-index:-1; opacity:0; pointer-events:none; transition:opacity .25s ease}
+    /* Frosted overlay （二・三階層で有効） */
+    #frost{position:fixed; inset:0; pointer-events:none; z-index:1; opacity:0; transition:opacity .3s ease;
+      backdrop-filter:blur(6px) saturate(120%);
+      background:rgba(255,255,255,.20)}
+    body.glass-on #frost{opacity:1}
 
-    /* Consistent frosted layer for every view */
-    
-    .view .inner, .view .posterInner, .view .wrap{position:relative; z-index:1}
+    /* App wrapper above overlays */
+    #app{position:relative; z-index:2}
 
-    /* 全ページにポスター背景（フッターまで含む） */
-    /* global background handled by #globalBg */
+    .wrap{max-width:980px; margin:0 auto; padding:0 16px}
 
     /* top bar */
-    .topbar{position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:flex-start; padding:8px; z-index:100; pointer-events:none}
-    .btn{pointer-events:auto; display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px; border:1px solid rgba(0,0,0,.08); background:rgba(255,255,255,.85); backdrop-filter:saturate(140%) blur(8px); box-shadow:0 6px 16px rgba(0,0,0,.12); cursor:pointer; font-weight:600}
+    .topbar{position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:flex-start; padding:8px; z-index:10; pointer-events:none}
+    .btn{pointer-events:auto; display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.85); backdrop-filter:saturate(140%) blur(8px); box-shadow:0 10px 22px rgba(0,0,0,.18); cursor:pointer; font-weight:700}
     .btn:active{transform:translateY(1px)}
     .btn.back{visibility:hidden}
 
@@ -43,254 +53,239 @@
     /* splash (poster) */
     #splash{color:#fff}
     .poster{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden}
-    .poster::before{content:""; position:absolute; inset:0; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:saturate(110%) contrast(105%)}
-    .poster::after{content:""; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.72), rgba(0,0,0,.18) 46%, rgba(0,0,0,.55) 95%)}
-    .posterInner{position:relative; z-index:1; text-align:center; padding:24px; width:min(92vw,980px)}
-    .logo{font-weight:800; letter-spacing:.12em; text-shadow:0 2px 20px rgba(0,0,0,.35); opacity:0; transform:translateY(10px); animation:fadeUp .9s .1s ease forwards}
-    .ttl{font-size:clamp(28px, 6vw, 64px); margin:.3em 0 .2em; line-height:1.05; text-shadow:0 2px 26px rgba(0,0,0,.35); opacity:0; transform:translateY(12px); animation:fadeUp 1s .25s ease forwards; font-weight:800}
-    .sub{font-size:clamp(16px, 2.8vw, 24px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .5s ease forwards; font-weight:600}
-    .meta{margin-top:16px; font-size:clamp(14px, 2.4vw, 18px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .7s ease forwards}
+    .posterInner{position:relative; text-align:center; padding:24px; width:min(92vw,980px)}
+    .logo{font-family:"Noto Sans", sans-serif; font-weight:800; letter-spacing:.12em; text-shadow:0 2px 20px rgba(0,0,0,.35); opacity:0; transform:translateY(10px); animation:fadeUp .9s .1s ease forwards}
+    .ttl{font-family:"Noto Serif JP", serif; font-size:clamp(32px, 6.4vw, 72px); margin:.2em 0 .1em; line-height:1.04; text-shadow:0 2px 30px rgba(0,0,0,.45); opacity:0; transform:translateY(12px); animation:fadeUp 1s .25s ease forwards; font-weight:900; color:var(--heading)}
+    .sub{font-family:"Noto Serif JP", serif; font-size:clamp(16px, 2.8vw, 24px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .5s ease forwards; font-weight:700; color:var(--sub)}
+    .meta{margin-top:16px; font-size:clamp(14px, 2.4vw, 18px); opacity:0; transform:translateY(12px); animation:fadeUp 1s .7s ease forwards; text-shadow:0 1px 10px rgba(0,0,0,.6)}
     .enter{margin-top:26px; opacity:0; transform:translateY(12px); animation:fadeUp 1s .9s ease forwards}
     .enter .btn{background:#fff; color:#0b1320}
     @keyframes fadeUp{to{opacity:1; transform:none}}
 
     /* level-2 menu */
     #menu{padding:80px 0 40px}
-    #menu .bg{position:absolute; inset:0}
-    /* per-view bg removed; using global */ .bg{display:none}
-    
-    #menu .inner{position:relative}
-    .cards{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; min-height:calc(100svh - 160px)}
-    .card{width:min(680px, 94vw); background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:30px; box-shadow:var(--shadow); cursor:pointer; display:flex; align-items:center; justify-content:center; min-height:152px; transition:transform .12s ease}
+    .cards{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:26px; min-height:calc(100svh - 160px)}
+    .card{width:min(700px, 94vw); background:rgba(255,255,255,.92); border:1px solid rgba(20,40,80,.08); border-radius:20px; padding:34px; box-shadow:var(--paper-shadow); cursor:pointer; display:flex; align-items:center; justify-content:center; min-height:160px; transition:transform .12s ease}
     .card:hover{transform:translateY(-2px)}
-    .card h3{margin:0; font-size:clamp(22px, 4.8vw, 32px); text-align:center; font-weight:800}
+    .card h3{margin:0; font-size:clamp(24px, 5vw, 36px); text-align:center; font-weight:900; font-family:"Noto Serif JP", serif}
 
     /* level-3 pages */
     .page{padding:72px 0 56px}
-    .page .bg{position:absolute; inset:0}
-    
-    
-    .page .inner{position:relative}
-
-    .section{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:20px; box-shadow:var(--shadow); margin:12px 0}
-    .section h2{margin:.2rem 0 .6rem; font-size:clamp(20px, 3.8vw, 28px); font-weight:800}
-    .section h3{margin:.2rem 0 .6rem; font-size:clamp(18px, 3.2vw, 24px); font-weight:800}
-    p{line-height:1.9; font-size:clamp(14px, 2.6vw, 17px)}
+    .section{background:rgba(255,255,255,.92); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:22px; box-shadow:var(--paper-shadow); margin:14px 0}
+    .section h2{margin:.2rem 0 .6rem; font-size:clamp(20px, 3.8vw, 28px); font-weight:900; font-family:"Noto Serif JP", serif}
+    .section h3{margin:.2rem 0 .6rem; font-size:clamp(18px, 3.2vw, 24px); font-weight:900; font-family:"Noto Serif JP", serif}
+    p{line-height:1.95; font-size:clamp(14px, 2.6vw, 17px)}
     .center{ text-align:center }
     details.section{padding:0}
-    details > summary{list-style:none; cursor:pointer; padding:16px 18px; font-weight:800; font-size:clamp(16px, 3.2vw, 20px)}
+    details > summary{list-style:none; cursor:pointer; padding:16px 18px; font-weight:900; font-size:clamp(16px, 3.2vw, 20px); font-family:"Noto Serif JP", serif}
     details > summary::-webkit-details-marker{display:none}
     details > div{padding:0 18px 18px}
     .subline{margin:-6px 0 10px; color:var(--muted); font-size:.95em}
 
-    footer{padding:28px 16px; text-align:center; color:var(--muted); font-size:.95rem}
-
-    /* glass toggle */
-    body.glass-on #glass{opacity:1}
+    footer{padding:28px 16px; text-align:center; color:rgba(255,255,255,.92); text-shadow:0 1px 8px rgba(0,0,0,.55); font-size:.95rem}
 
     /* survey form */
     form{display:grid; gap:12px}
-    label{font-weight:700}
-    input, textarea{width:100%; padding:12px 12px; border-radius:10px; border:1px solid rgba(20,40,80,.16); font:inherit; background:#fff}
+    label{font-weight:800; font-family:"Noto Serif JP", serif}
+    input, textarea{width:100%; padding:12px 12px; border-radius:12px; border:1px solid rgba(20,40,80,.16); font:inherit; background:#fff}
     textarea{min-height:140px}
     .note-ok{color:#1b7f2a}
     .note-err{color:#a61b1b}
   </style>
 </head>
 <body>
-  <div id="bgPoster"></div>
-  <div id="glass"></div>
-  <!-- top bar -->
-  <div class="topbar">
-    <button class="btn back" id="backBtn"><span>←</span><span>戻る</span></button>
+  <!-- Frosted overlay -->
+  <div id="frost" aria-hidden="true"></div>
+
+  <!-- App content -->
+  <div id="app">
+    <!-- top bar -->
+    <div class="topbar">
+      <button class="btn back" id="backBtn"><span>←</span><span>戻る</span></button>
+    </div>
+
+    <!-- splash -->
+    <section class="view active" id="splash">
+      <div class="poster" id="enterPoster">
+        <div class="posterInner">
+          <div class="logo">第一回 聶浩軒 ファゴット博士リサイタル</div>
+          <div class="ttl">抗う音、芽吹く</div>
+          <div class="sub">ハーラル・セーヴェルー / 作風変容の軌跡【前編】</div>
+          <div class="meta">日時：2025年12月2日（火）18:30開場/19:00開演｜会場：東京藝術大学 音楽学部 第6ホール</div>
+          <div class="enter"><button class="btn" id="enterBtn">タップして続く</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- level-2 menu -->
+    <section class="view" id="menu">
+      <div class="wrap inner">
+        <div class="cards">
+          <div class="card" data-go="page-severud"><h3>はじまり</h3></div>
+          <div class="card" data-go="page-program"><h3>プログラム</h3></div>
+          <div class="card" data-go="page-performers"><h3>出演者</h3></div>
+          <div class="card" data-go="page-survey"><h3>アンケート</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- page: はじまり -->
+    <section class="view page" id="page-severud">
+      <div class="wrap inner">
+        <div class="section">
+          <h2>聶浩軒 第一回博士リサイタル</h2>
+          <p>《抗う音、芽吹く》</p>
+          <p>日時：2025年12月2日（火）18:30開場/19:00開演／会場：東京藝術大学 音楽学部 第6ホール</p>
+        </div>
+        <div class="section">
+          <p>この度は、私の第一回博士リサイタルにお越しいただき、誠にありがとうございます。ファゴット専攻博士一年、聶浩軒（ジョウ・コウケン）と申します。</p>
+          <p>私の研究テーマは、ノルウェーの作曲家ハーラル・セーヴェルー（Harald Sæverud, 1897–1992）の作曲スタイルの変遷、とりわけ第二次世界大戦期における変化に関するものです。セーヴェルーは幼少の頃から作曲の才能を示し、18歳で独学により交響曲を書き始め、その作品によってベルリン芸術大学への留学を果たしました。初期の作品は新古典主義的であり、ときに無調的な側面も見られますが、当時のノルウェーではその独自性ゆえに理解されにくい部分もありました。</p>
+          <p>本格的に名声を確立し、ノルウェーを代表する作曲家として知られるようになった契機は、まさに1940年から1945年までのナチス占領期でした。この5年間、セーヴェルーは「国家社会主義に対する音楽的レジスタンスの象徴」として、反ナチス的な意味を内包する作品を発表し続けました。彼は侵略下という過酷な状況の中で、怒りや悲しみ、そして希望を音楽に託し、わずか5年間で12作品を発表。その半数が交響曲という大規模な形式であったことからも、彼にとって最も創造的な時期であったといえます。この経験を経て、セーヴェルーの作曲スタイルは飛躍的に成熟し、彼の名は国際的にも広まりました。</p>
+          <p>したがって、セーヴェルーの作風がどのように変化したのかを理解する上で、この5年間を中心に研究することは不可欠です。ナチス占領が彼に与えた影響、作品に込められた感情、そして音楽のみでどのように抵抗の意志を表現したのかを探ることが、本研究の大きな柱となっています。さらに、この「レジスタンス性」が戦後の作品にもどのように受け継がれたのかを明らかにしようとしています。</p>
+          <p>本リサイタルでは、この研究の一環として、セーヴェルーの戦前および戦時中の作品を作曲年代順に演奏いたします。個人主義的でラディカルな初期の作風から、しだいに柔軟で人間的、そして民族の声を代弁する音楽へと変化していくその軌跡を、ぜひ音楽を通して感じ取っていただければ幸いです。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- page: プログラム -->
+    <section class="view page" id="page-program">
+      <div class="wrap inner">
+        <div class="section">
+          <h2>第1部：戦前作品</h2>
+          <details class="section" open>
+            <summary>チェロ協奏曲 作品7</summary>
+            <div>
+              <p class="subline">(Konsert for cello og orkester, Op. 7, 1930–31)</p>
+              <p>チェロ協奏曲は、セーヴェルーが残した5曲の協奏曲の中で最初に作曲された作品です。激しく、情熱的で、ときに無調的な表現主義に近い響きを持ち、初期の作風を大胆に示しています。全体は三楽章で構成されています。</p>
+              <p>この作品は長いあいだ未完成のままで、作曲者自身が満足できず、ピアノ伴奏版のみが残されました。1954年にセーヴェルー自身が再びオーケストラ版の完成を試みましたが、それでも納得に至らず、最終的にスコアは未完成のままです。セーヴェルーの死後、親友でありファゴット奏者・作曲家のロベルト・レンネス（Robert Rønnes）によって補筆され、ようやく1999年に初演が実現しました。</p>
+              <p>今回は、セーヴェルーの手書きによるピアノ伴奏版をもとに調整を加え、その第1楽章をファゴットで演奏いたします。</p>
+            </div>
+          </details>
+          <details class="section">
+            <summary>フルートと弦楽団のための嬉遊曲 第1番 作品13</summary>
+            <div>
+              <p class="subline">(Divertimento nr. 1 for fløyte og strykere, Op. 13, 1939)</p>
+              <p>この作品は、ドイツの音楽教育者ヒルマル・ヘックナー（Hilmar Höckner）の依頼により、教育目的のために作曲されました。シリーズの第1作としてフルートと弦楽団のために書かれ、ヘックナーとセーヴェルーは教育用の連作としてさらに続ける予定でした。しかし、第二次世界大戦の勃発によってこの計画は中止となり、結果的にこの1曲だけが残されました。</p>
+              <p>教育目的の依頼であったため、以前の作品よりも明るく、親しみやすい作風となっています。ただし、その変化は単に教育的理由だけではありません。この頃のセーヴェルーは、「新音楽協会（Ny Musikk）」の副会長に就任し、裕福な家庭の娘と結婚、そして自然豊かな郊外の荘園「シーリューステール」に移り住んだ時期でもあります。貧しく孤独な時代を乗り越え、ようやく新しい生活を迎えた彼の心境が、この柔らかく温かな音楽に映し出されているようです。もちろん、セーヴェルー特有の鋭い不協和音も随所に残っています。</p>
+              <p>全4楽章からなり、フルートは独奏的ではなく、弦楽器と対等に響き合うアンサンブルとして書かれています。今回は、ファゴットと各弦楽器1名ずつによる小編成で演奏いたします。</p>
+            </div>
+          </details>
+          <details class="section">
+            <summary>やさしい小曲集より《ロンド・アモローソ》 作品14-7</summary>
+            <div>
+              <p class="subline">(Lette stykker, Rondo Amoroso, Op. 14–7, 1939)</p>
+              <p>セーヴェルーはしばしば自分のことを「世界で一番悲しい人」と語り、「私の作品は何年かすれば誰にも忘れられてしまうだろう」とも言っていました。しかし、その中で唯一、彼が心から満足していたのがこの《ロンド・アモローソ》です。彼はこう言いました――「少なくとも私は《ロンド・アモローソ》を作った！これだけは必ず後世に残るだろう。」</p>
+              <p>この作品は母親に献呈されたもので、タイトルの “Amoroso（愛情をこめて）” は親子の愛を意味しています。曲の着想は、ある日セーヴェルーがピアノで悲しげな旋律を弾いていたとき、息子との何気ない会話から生まれました。</p>
+              <p>「パパ、悲しいの？」<br>「そうだね」<br>「ぼくが新聞を破いたから？」<br>「うん」<br>「じゃあ、もうしないよ」<br>「ありがとう」<br>「でも、他の子も破ったよ」</p>
+              <p>そんな小さなやり取りの中の、悲しさと優しさ、そして微笑みのような感情が、この繊細なロンドに込められています。そこには怒りはなく、ただ愛だけが静かに息づいています。</p>
+              <p>この曲はピアノ曲集《やさしい小曲集（Lette stykker）》Op.14の第7曲であり、家族とともにシーリューステールで新しい生活を始めた、セーヴェルーにとって最も穏やかな時期に書かれました。今回は、A.オスカル・ホーグラン（A. Oscar Haugland）による木管五重奏版でお届けいたします。</p>
+            </div>
+          </details>
+        </div>
+
+        <div class="section center">— 休憩 —</div>
+
+        <div class="section">
+          <h2>第2部：戦中作品</h2>
+          <details class="section" open>
+            <summary>木管五重奏第1番《シーリューステールからの歌と踊り》第1集 作品21a</summary>
+            <div>
+              <p class="subline">(Blåsekvintett nr. 1, Slåtter og stev fra Siljustøl. Suite I, Op. 21a, 1942)</p>
+              <p>本作は戦時中に作曲され、自宅の名「シーリューステール」をタイトルに掲げ、その周囲の自然を主題としたピアノ曲集《シーリューステールからの歌と踊り》の第1集にあたります。全体は3集で構成されており、本曲はその第1集です。</p>
+              <p>同時期、セーヴェルーは《交響曲第5番〈幻想曲のように〉（Symfoni nr.5, Quasi una fantasia）》のような、より直接的にナチスへの抵抗を示す作品も書いていましたが、この曲では主にノルウェーの自然と静けさを描いています。</p>
+              <p>なぜ戦時中にこのような柔らかく繊細な作品を作ることができたのか。その答えは、セーヴェルー自身の言葉――「困難な時代こそ、自然はより身近に感じられる」――にあると言えるでしょう。この作品には、戦争という現実の中でなお生き続ける自然の静かな息づかいが感じられます。</p>
+              <p>1980年、セーヴェルーはベルゲン木管五重奏団のために新たに木管五重奏版を編曲しました。今回は、その五重奏版を演奏いたします。</p>
+            </div>
+          </details>
+          <details class="section">
+            <summary>ヴァイオリンとピアノのためのロマンス 作品23a</summary>
+            <div>
+              <p class="subline">(Romanza. Versjon for fiolin og klaver, Op. 23a, 1942)</p>
+              <p>この作品もまた戦時中に作曲されたものですが、直接的な抵抗を描くものでも、自然を歌うものでもありません。むしろ、まるで歌のように、作曲家の内面的な叙情と柔らかい感情が穏やかに流れています。一方で、その抒情の奥には、当時のノルウェーの現実を背景とする深い悲しみも感じられます。</p>
+              <p>もともとはヴァイオリンとオーケストラのために書かれましたが、同時期にピアノ伴奏版も制作され、1978年に改訂が加えられました。今回は、そのピアノ伴奏版をもとに、ファゴットで演奏いたします。</p>
+            </div>
+          </details>
+          <details class="section">
+            <summary>《シーリューステールからの歌と踊り》第2集より「クモの巣の糸の上で」作品22-4 ＆ 「抵抗のバラード」作品22-5</summary>
+            <div>
+              <p class="subline">(Slåtter og stev fra Siljustøl. Suite II: På kingelvevstrenger, Op. 22–4 / Kjempeviseslåtten, Op. 22–5, 1943)</p>
+              <p>これら2曲は、ピアノ曲集《シーリューステールからの歌と踊り》第2集の第4曲と第5曲にあたります。おそらく戦況が悪化していく中で、自然を描く作品集の中にも次第に戦争との関わり、抵抗の意識が表れていったと考えられます。特にこの2曲には、その傾向がはっきりと見られます。</p>
+              <p>第4曲「クモの巣の糸の上で」は、自然の描写にとどまらず、当時のノルウェーの状況を象徴しているとも言えます。蜘蛛の糸は細く、風にも揺れるほど弱々しく見えますが、実際には驚くほど強く、決して切れません。この音楽には、「ノルウェーもまた決して負けない」という静かな抵抗のメッセージが込められているように思われます。</p>
+              <p>続く第5曲「抵抗のバラード」では、もはや象徴ではなく、タイトル自体に“抵抗”という言葉が明示されています。サブタイトルには「ノルウェー抵抗運動に参加する戦士たちへ」と記され、作曲者の思いはさらに直接的に表現されています。</p>
+              <p>この作品が生まれたのは1943年、セーヴェルーがオスロからベルゲンへ戻る途中の出来事がきっかけでした。彼はドイツ軍の占領を嫌い、兵士の乗る列車を避けて、あえて時間のかかるバスで帰ることを選びました。バスから見える山や森の景色は穏やかで、まるで戦争など存在しないかのように美しく感じられたといいます。しかし、船に乗り換える際、周囲の山々がすべてドイツ軍の兵舎で覆われている光景を目にし、その瞬間に現実へ引き戻され、怒りがこみ上げたと彼は記しています。その怒りと呪いの感情こそが、この作品を生み出しました。</p>
+              <p>第4曲はピアニスト横山希さんによるソロ演奏、休みを挟まずに第5曲へと続きます。第5曲は田村薫さんのアレンジによる特別版で、オーケストラ版を基に、今回出演する全奏者による特別編成でお届けいたします。</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- page: 出演者及びスタッフ -->
+    <section class="view page" id="page-performers">
+      <div class="wrap inner">
+        <div class="section">
+          <h2>出演者及びスタッフ</h2>
+        </div>
+        <div class="section">
+          <h3>出演者</h3>
+          <ul>
+            <li>ファゴット：聶浩軒</li>
+            <li>ピアノ：横山希</li>
+            <li>フルート：藤枝麻里花</li>
+            <li>オーボエ：古川瑞記</li>
+            <li>クラリネット：吉村錬</li>
+            <li>ホルン：直田真潮</li>
+            <li>ヴァイオリン1st：小暮莉加</li>
+            <li>ヴァイオリン2nd：笠井文昭</li>
+            <li>ヴィオラ：由井ひまり</li>
+            <li>チェロ：谷川萌音</li>
+            <li>コントラバス：山内果連</li>
+          </ul>
+        </div>
+        <div class="section">
+          <h3>スタッフ</h3>
+          <ul>
+            <li>今村光流</li>
+            <li>田中陽菜</li>
+            <li>篠原楓</li>
+            <li>奈良彩葉</li>
+            <li>北折衣晴</li>
+          </ul>
+        </div>
+        <div class="section">
+          <ul>
+            <li>編曲：田村薫</li>
+            <li>チラシデザイン：由井ひまり</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- page: アンケート -->
+    <section class="view page" id="page-survey">
+      <div class="wrap inner">
+        <div class="section">
+          <h2>アンケート</h2>
+          <p>最後までお聴きいただき、誠にありがとうございます。来年はセーヴェルーの戦後作品を中心に、戦中の経験を経てどのように作風が成熟し、「レジスタンス性」がその後の音楽にどのような形で残されたのかを探る予定です。ファゴットを通して、セーヴェルーの音楽世界のさらなる広がりをお聴きいただければ幸いです。</p>
+          <form id="surveyForm">
+            <label for="name">お名前</label>
+            <input id="name" name="name" />
+
+            <label for="contact">ご連絡先</label>
+            <input id="contact" name="contact" />
+
+            <label for="msg">ご感想</label>
+            <textarea id="msg" name="message"></textarea>
+
+            <button class="btn" type="submit">送信</button>
+            <div id="formNote" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>© 2025 聶浩軒 / Digital Program</footer>
   </div>
-
-  <!-- splash -->
-  <section class="view active" id="splash">
-    <div class="poster" id="enterPoster">
-      <div class="posterInner">
-        <div class="logo">第一回 聶浩軒 ファゴット博士リサイタル</div>
-        <div class="ttl">抗う音、芽吹く</div>
-        <div class="sub">ハーラル・セーヴェルー / 作風変容の軌跡【前編】</div>
-        <div class="meta">日時：2025年12月2日（火）18:30開場/19:00開演｜会場：東京藝術大学 第6ホール</div>
-        <div class="enter"><button class="btn" id="enterBtn">タップして続く</button></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- level-2 menu -->
-  <section class="view" id="menu">
-    <div class="bg" aria-hidden="true"></div>
-    <div class="wrap inner">
-      <div class="cards">
-        <div class="card" data-go="page-severud"><h3>はじまり</h3></div>
-        <div class="card" data-go="page-program"><h3>プログラム</h3></div>
-        <div class="card" data-go="page-performers"><h3>出演者</h3></div>
-        <div class="card" data-go="page-survey"><h3>アンケート</h3></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- page: はじまり -->
-  <section class="view page" id="page-severud">
-    <div class="bg" aria-hidden="true"></div>
-    <div class="wrap inner">
-      <div class="section">
-        <h2>聶浩軒 第一回博士リサイタル</h2>
-        <p>《抗う音、芽吹く》</p>
-        <p>日時：2025年12月2日（火）18:30開場/19:00開演／会場：東京藝術大学 第6ホール</p>
-      </div>
-      <div class="section">
-        <p>この度は、私の第一回博士リサイタルにお越しいただき、誠にありがとうございます。ファゴット専攻博士一年、聶浩軒（ジョウ・コウケン）と申します。</p>
-        <p>私の研究テーマは、ノルウェーの作曲家ハーラル・セーヴェルー（Harald Sæverud, 1897–1992）の作曲スタイルの変遷、とりわけ第二次世界大戦期における変化に関するものです。セーヴェルーは幼少の頃から作曲の才能を示し、18歳で独学により交響曲を書き始め、その作品によってベルリン芸術大学への留学を果たしました。初期の作品は新古典主義的であり、ときに無調的な側面も見られますが、当時のノルウェーではその独自性ゆえに理解されにくい部分もありました。</p>
-        <p>本格的に名声を確立し、ノルウェーを代表する作曲家として知られるようになった契機は、まさに1940年から1945年までのナチス占領期でした。この5年間、セーヴェルーは「国家社会主義に対する音楽的レジスタンスの象徴」として、反ナチス的な意味を内包する作品を発表し続けました。彼は侵略下という過酷な状況の中で、怒りや悲しみ、そして希望を音楽に託し、わずか5年間で12作品を発表。その半数が交響曲という大規模な形式であったことからも、彼にとって最も創造的な時期であったといえます。この経験を経て、セーヴェルーの作曲スタイルは飛躍的に成熟し、彼の名は国際的にも広まりました。</p>
-        <p>したがって、セーヴェルーの作風がどのように変化したのかを理解する上で、この5年間を中心に研究することは不可欠です。ナチス占領が彼に与えた影響、作品に込められた感情、そして音楽のみでどのように抵抗の意志を表現したのかを探ることが、本研究の大きな柱となっています。さらに、この「レジスタンス性」が戦後の作品にもどのように受け継がれたのかを明らかにしようとしています。</p>
-        <p>本リサイタルでは、この研究の一環として、セーヴェルーの戦前および戦時中の作品を作曲年代順に演奏いたします。個人主義的でラディカルな初期の作風から、しだいに柔軟で人間的、そして民族の声を代弁する音楽へと変化していくその軌跡を、ぜひ音楽を通して感じ取っていただければ幸いです。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- page: プログラム -->
-  <section class="view page" id="page-program">
-    <div class="bg" aria-hidden="true"></div>
-    <div class="wrap inner">
-      <div class="section">
-        <h2>第1部：戦前作品</h2>
-        <details class="section" open>
-          <summary>チェロ協奏曲 作品7</summary>
-          <div>
-            <p class="subline">(Konsert for cello og orkester, Op. 7, 1930–31)</p>
-            <p>チェロ協奏曲は、セーヴェルーが残した5曲の協奏曲の中で最初に作曲された作品です。激しく、情熱的で、ときに無調的な表現主義に近い響きを持ち、初期の作風を大胆に示しています。全体は三楽章で構成されています。</p>
-            <p>この作品は長いあいだ未完成のままで、作曲者自身が満足できず、ピアノ伴奏版のみが残されました。1954年にセーヴェルー自身が再びオーケストラ版の完成を試みましたが、それでも納得に至らず、最終的にスコアは未完成のままです。セーヴェルーの死後、親友でありファゴット奏者・作曲家のロベルト・レンネス（Robert Rønnes）によって補筆され、ようやく1999年に初演が実現しました。</p>
-            <p>今回は、セーヴェルーの手書きによるピアノ伴奏版をもとに調整を加え、その第1楽章をファゴットで演奏いたします。</p>
-          </div>
-        </details>
-        <details class="section">
-          <summary>フルートと弦楽団のための嬉遊曲 第1番 作品13</summary>
-          <div>
-            <p class="subline">(Divertimento nr. 1 for fløyte og strykere, Op. 13, 1939)</p>
-            <p>この作品は、ドイツの音楽教育者ヒルマル・ヘックナー（Hilmar Höckner）の依頼により、教育目的のために作曲されました。シリーズの第1作としてフルートと弦楽団のために書かれ、ヘックナーとセーヴェルーは教育用の連作としてさらに続ける予定でした。しかし、第二次世界大戦の勃発によってこの計画は中止となり、結果的にこの1曲だけが残されました。</p>
-            <p>教育目的の依頼であったため、以前の作品よりも明るく、親しみやすい作風となっています。ただし、その変化は単に教育的理由だけではありません。この頃のセーヴェルーは、「新音楽協会（Ny Musikk）」の副会長に就任し、裕福な家庭の娘と結婚、そして自然豊かな郊外の荘園「シーリューステール」に移り住んだ時期でもあります。貧しく孤独な時代を乗り越え、ようやく新しい生活を迎えた彼の心境が、この柔らかく温かな音楽に映し出されているようです。もちろん、セーヴェルー特有の鋭い不協和音も随所に残っています。</p>
-            <p>全4楽章からなり、フルートは独奏的ではなく、弦楽器と対等に響き合うアンサンブルとして書かれています。今回は、ファゴットと各弦楽器1名ずつによる小編成で演奏いたします。</p>
-          </div>
-        </details>
-        <details class="section">
-          <summary>やさしい小曲集より《ロンド・アモローソ》 作品14-7</summary>
-          <div>
-            <p class="subline">(Lette stykker, Rondo Amoroso, Op. 14–7, 1939)</p>
-            <p>セーヴェルーはしばしば自分のことを「世界で一番悲しい人」と語り、「私の作品は何年かすれば誰にも忘れられてしまうだろう」とも言っていました。しかし、その中で唯一、彼が心から満足していたのがこの《ロンド・アモローソ》です。彼はこう言いました――「少なくとも私は《ロンド・アモローソ》を作った！これだけは必ず後世に残るだろう。」</p>
-            <p>この作品は母親に献呈されたもので、タイトルの “Amoroso（愛情をこめて）” は親子の愛を意味しています。曲の着想は、ある日セーヴェルーがピアノで悲しげな旋律を弾いていたとき、息子との何気ない会話から生まれました。</p>
-            <p>「パパ、悲しいの？」<br>「そうだね」<br>「ぼくが新聞を破いたから？」<br>「うん」<br>「じゃあ、もうしないよ」<br>「ありがとう」<br>「でも、他の子も破ったよ」</p>
-            <p>そんな小さなやり取りの中の、悲しさと優しさ、そして微笑みのような感情が、この繊細なロンドに込められています。そこには怒りはなく、ただ愛だけが静かに息づいています。</p>
-            <p>この曲はピアノ曲集《やさしい小曲集（Lette stykker）》Op.14の第7曲であり、家族とともにシーリューステールで新しい生活を始めた、セーヴェルーにとって最も穏やかな時期に書かれました。今回は、A.オスカル・ホーグラン（A. Oscar Haugland）による木管五重奏版でお届けいたします。</p>
-          </div>
-        </details>
-      </div>
-
-      <div class="section center">— 休憩 —</div>
-
-      <div class="section">
-        <h2>第2部：戦中作品</h2>
-        <details class="section" open>
-          <summary>木管五重奏第1番《シーリューステールからの歌と踊り》第1集 作品21a</summary>
-          <div>
-            <p class="subline">(Blåsekvintett nr. 1, Slåtter og stev fra Siljustøl. Suite I, Op. 21a, 1942)</p>
-            <p>本作は戦時中に作曲され、自宅の名「シーリューステール」をタイトルに掲げ、その周囲の自然を主題としたピアノ曲集《シーリューステールからの歌と踊り》の第1集にあたります。全体は3集で構成されており、本曲はその第1集です。</p>
-            <p>同時期、セーヴェルーは《交響曲第5番〈幻想曲のように〉（Symfoni nr.5, Quasi una fantasia）》のような、より直接的にナチスへの抵抗を示す作品も書いていましたが、この曲では主にノルウェーの自然と静けさを描いています。</p>
-            <p>なぜ戦時中にこのような柔らかく繊細な作品を作ることができたのか。その答えは、セーヴェルー自身の言葉――「困難な時代こそ、自然はより身近に感じられる」――にあると言えるでしょう。この作品には、戦争という現実の中でなお生き続ける自然の静かな息づかいが感じられます。</p>
-            <p>1980年、セーヴェルーはベルゲン木管五重奏団のために新たに木管五重奏版を編曲しました。今回は、その五重奏版を演奏いたします。</p>
-          </div>
-        </details>
-        <details class="section">
-          <summary>ヴァイオリンとピアノのためのロマンス 作品23a</summary>
-          <div>
-            <p class="subline">(Romanza. Versjon for fiolin og klaver, Op. 23a, 1942)</p>
-            <p>この作品もまた戦時中に作曲されたものですが、直接的な抵抗を描くものでも、自然を歌うものでもありません。むしろ、まるで歌のように、作曲家の内面的な叙情と柔らかい感情が穏やかに流れています。一方で、その抒情の奥には、当時のノルウェーの現実を背景とする深い悲しみも感じられます。</p>
-            <p>もともとはヴァイオリンとオーケストラのために書かれましたが、同時期にピアノ伴奏版も制作され、1978年に改訂が加えられました。今回は、そのピアノ伴奏版をもとに、ファゴットで演奏いたします。</p>
-          </div>
-        </details>
-        <details class="section">
-          <summary>《シーリューステールからの歌と踊り》第2集より「クモの巣の糸の上で」作品22-4 ＆ 「抵抗のバラード」作品22-5</summary>
-          <div>
-            <p class="subline">(Slåtter og stev fra Siljustøl. Suite II: På kingelvevstrenger, Op. 22–4 / Kjempeviseslåtten, Op. 22–5, 1943)</p>
-            <p>これら2曲は、ピアノ曲集《シーリューステールからの歌と踊り》第2集の第4曲と第5曲にあたります。おそらく戦況が悪化していく中で、自然を描く作品集の中にも次第に戦争との関わり、抵抗の意識が表れていったと考えられます。特にこの2曲には、その傾向がはっきりと見られます。</p>
-            <p>第4曲「クモの巣の糸の上で」は、自然の描写にとどまらず、当時のノルウェーの状況を象徴しているとも言えます。蜘蛛の糸は細く、風にも揺れるほど弱々しく見えますが、実際には驚くほど強く、決して切れません。この音楽には、「ノルウェーもまた決して負けない」という静かな抵抗のメッセージが込められているように思われます。</p>
-            <p>続く第5曲「抵抗のバラード」では、もはや象徴ではなく、タイトル自体に“抵抗”という言葉が明示されています。サブタイトルには「ノルウェー抵抗運動に参加する戦士たちへ」と記され、作曲者の思いはさらに直接的に表現されています。</p>
-            <p>この作品が生まれたのは1943年、セーヴェルーがオスロからベルゲンへ戻る途中の出来事がきっかけでした。彼はドイツ軍の占領を嫌い、兵士の乗る列車を避けて、あえて時間のかかるバスで帰ることを選びました。バスから見える山や森の景色は穏やかで、まるで戦争など存在しないかのように美しく感じられたといいます。しかし、船に乗り換える際、周囲の山々がすべてドイツ軍の兵舎で覆われている光景を目にし、その瞬間に現実へ引き戻され、怒りがこみ上げたと彼は記しています。その怒りと呪いの感情こそが、この作品を生み出しました。</p>
-            <p>第4曲はピアニスト横山希さんによるソロ演奏、休みを挟まずに第5曲へと続きます。第5曲は田村薫さんのアレンジによる特別版で、オーケストラ版を基に、今回出演する全奏者による特別編成でお届けいたします。</p>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- page: 出演者及びスタッフ -->
-  <section class="view page" id="page-performers">
-    <div class="bg" aria-hidden="true"></div>
-    <div class="wrap inner">
-      <div class="section">
-        <h2>出演者及びスタッフ</h2>
-      </div>
-      <div class="section">
-        <h3>出演者</h3>
-        <ul>
-          <li>ファゴット：聶浩軒</li>
-          <li>ピアノ：横山希</li>
-          <li>フルート：藤枝麻里花</li>
-          <li>オーボエ：古川瑞記</li>
-          <li>クラリネット：吉村錬</li>
-          <li>ホルン：直田真潮</li>
-          <li>ヴァイオリン1st：小暮莉加</li>
-          <li>ヴァイオリン2nd：笠井文昭</li>
-          <li>ヴィオラ：由井ひまり</li>
-          <li>チェロ：谷川萌音</li>
-          <li>コントラバス：山内果連</li>
-        </ul>
-      </div>
-      <div class="section">
-        <h3>スタッフ</h3>
-        <ul>
-          <li>今村光流</li>
-          <li>田中陽菜</li>
-          <li>篠原楓</li>
-          <li>奈良彩葉</li>
-          <li>北折衣晴</li>
-        </ul>
-      </div>
-      <div class="section">
-        <ul>
-          <li>編曲：田村薫</li>
-          <li>チラシデザイン：由井ひまり</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- page: アンケート -->
-  <section class="view page" id="page-survey">
-    <div class="bg" aria-hidden="true"></div>
-    <div class="wrap inner">
-      <div class="section">
-        <h2>アンケート</h2>
-        <p>最後までお聴きいただき、誠にありがとうございます。来年はセーヴェルーの戦後作品を中心に、戦中の経験を経てどのように作風が成熟し、「レジスタンス性」がその後の音楽にどのような形で残されたのかを探る予定です。ファゴットを通して、セーヴェルーの音楽世界のさらなる広がりをお聴きいただければ幸いです。</p>
-        <form id="surveyForm">
-          <label for="name">お名前</label>
-          <input id="name" name="name" />
-
-          <label for="contact">ご連絡先</label>
-          <input id="contact" name="contact" />
-
-          <label for="msg">ご感想</label>
-          <textarea id="msg" name="message"></textarea>
-
-          <button class="btn" type="submit">送信</button>
-          <div id="formNote" aria-live="polite"></div>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <footer>© 2025 聶浩軒 / Digital Program</footer>
 
   <script>
     /* SPA state with fade-in */
