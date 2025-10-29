@@ -13,14 +13,19 @@
       --ink:#0b1320; --bg:#eaf1ff; --muted:#5a6a87; --card:#fff; --brand:#2f6fff;
       --radius:18px; --max:980px; --shadow:0 12px 30px rgba(10,20,40,.18);
     }
-    html,body{margin:0; font-family:"Noto Sans",system-ui,-apple-system,Segoe UI,Roboto,Arial,"Hiragino Sans","Yu Gothic","Microsoft YaHei",sans-serif; color:var(--ink); background:var(--bg)}
-    *{box-sizing:border-box}
-    a{color:var(--brand); text-decoration:none}
-    .wrap{max-width:var(--max); margin:0 auto; padding:0 16px}
+    html,body{$1background:transparent; text-decoration:none}
+    $1
+
+    /* Global poster background element (covers entire app incl. footer) */
+    #globalBg{position:fixed; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(7px) saturate(118%); transform:scale(1.06); z-index:-2}
+    #globalBg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.26), rgba(220,232,255,.26))}
+
+    /* Consistent frosted layer for every view */
+    .view::before{content:""; position:absolute; inset:0; backdrop-filter:blur(3.5px) saturate(118%); z-index:0}
+    .view .inner, .view .posterInner, .view .wrap{position:relative; z-index:1}
 
     /* 全ページにポスター背景（フッターまで含む） */
-    body::before{content:""; position:fixed; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(8px) saturate(118%); transform:scale(1.06); z-index:-2}
-    body::after{content:""; position:fixed; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.28), rgba(220,232,255,.28)); z-index:-1}
+    /* global background handled by #globalBg */
 
     /* top bar */
     .topbar{position:fixed; inset:0 0 auto 0; height:56px; display:flex; align-items:center; justify-content:flex-start; padding:8px; z-index:100; pointer-events:none}
@@ -51,8 +56,8 @@
     /* level-2 menu */
     #menu{padding:80px 0 40px}
     #menu .bg{position:absolute; inset:0}
-    #menu .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(5px) saturate(118%); transform:scale(1.04); opacity:.9}
-    #menu .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.22), rgba(220,232,255,.22))}
+    /* per-view bg removed; using global */ .bg{display:none}
+    
     #menu .inner{position:relative}
     .cards{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; min-height:calc(100svh - 160px)}
     .card{width:min(680px, 94vw); background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:30px; box-shadow:var(--shadow); cursor:pointer; display:flex; align-items:center; justify-content:center; min-height:152px; transition:transform .12s ease}
@@ -62,8 +67,8 @@
     /* level-3 pages */
     .page{padding:72px 0 56px}
     .page .bg{position:absolute; inset:0}
-    .page .bg::before{content:""; position:absolute; inset:-4%; background:url('assets/img/poster-bg.jpg') center/cover no-repeat; filter:blur(6px) saturate(120%); transform:scale(1.04); opacity:.9}
-    .page .bg::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(250,252,255,.22), rgba(220,232,255,.22))}
+    
+    
     .page .inner{position:relative}
 
     .section{background:var(--card); border:1px solid rgba(20,40,80,.08); border-radius:18px; padding:20px; box-shadow:var(--shadow); margin:12px 0}
@@ -89,6 +94,7 @@
   </style>
 </head>
 <body>
+  <div id="globalBg"></div>
   <!-- top bar -->
   <div class="topbar">
     <button class="btn back" id="backBtn"><span>←</span><span>戻る</span></button>
