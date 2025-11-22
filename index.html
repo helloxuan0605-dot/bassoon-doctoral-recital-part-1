@@ -9,10 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&family=Noto+Serif+JP:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    --glass-bg: rgba(255,255,255,.14);
+    --glass-bg: rgba(255,255,255,.14);        /* 明るめの毛玻璃（首屏等） */
     --glass-brd: rgba(255,255,255,.22);
+    --glass-dark: rgba(0,0,0,.38);            /* プログラムのdetails用：暗色毛玻璃 */
+    --glass-dark-brd: rgba(255,255,255,.25);
     --text: #111;
-    --text-soft:#2b2b2b;
     --title:#ffffff;
   }
   *{box-sizing:border-box}
@@ -22,6 +23,7 @@
     line-height:1.9; letter-spacing:.02em; -webkit-font-smoothing:antialiased;
     background:#000;
   }
+
   /* 全ページ共通：フルカバー背景 */
   .siteBg{
     position:fixed; inset:0; z-index:-2;
@@ -36,7 +38,7 @@
   /* ページラッパ＋毛ガラス */
   .page{
     min-height:100svh; display:none; opacity:0; transition:opacity .6s ease;
-    padding:80px 18px 96px; /* 上:余白, 下:フッタ分 */
+    padding:80px 18px 96px; /* 上余白/下はフッター分 */
     position:relative;
   }
   .page.show{display:block; opacity:1}
@@ -76,7 +78,6 @@
     background:transparent; color:#fff; border:1px solid rgba(255,255,255,.8);
     box-shadow:0 8px 22px rgba(0,0,0,.35); text-decoration:none; font-weight:700
   }
-  /* クリック時の淡入 */
   .fadeIn{ animation:fadeIn .8s ease both }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
 
@@ -95,7 +96,7 @@
   }
 
   /* ===== 第3階層 各ページ ===== */
-  .pageWrap{ max-width:980px; margin:0 auto; padding:28px 22px 30px; }
+  .pageWrap{ max-width:980px; margin:0 auto; padding:22px 22px 30px; }
   .pageWrap h2{
     font-family:"Noto Serif JP"; font-weight:900; font-size: clamp(26px, 4.2vw, 42px);
     letter-spacing:.08em; margin:0 0 14px; color:#fff;
@@ -109,21 +110,34 @@
   .pageWrap p{ color:#f2f2f2; margin:10px 0 }
   .note{ font-size:13px; opacity:.9 }
 
-  /* 作品ブロック */
+  /* 三级页也有戻る */
+  .pageWrap .backBtn{ position:static; margin-bottom:10px; }
+
+  /* プログラムのdetailsを暗色毛玻璃＋白字に */
   details{ margin:14px 0 18px; }
   details>summary{
     cursor:pointer; list-style:none; padding:14px 14px; border-radius:14px;
-    background:rgba(255,255,255,.85); color:#121212; font-weight:800;
-    box-shadow:0 10px 28px rgba(0,0,0,.25);
+    background:var(--glass-dark); color:#fff; font-weight:800;
+    border:1px solid var(--glass-dark-brd);
+    box-shadow:0 10px 28px rgba(0,0,0,.28);
   }
   details[open]>summary{ border-bottom-left-radius:10px; border-bottom-right-radius:10px }
   details .inner{
-    padding:14px 16px 4px; border-radius:0 0 14px 14px;
-    background:rgba(255,255,255,.92); color:#111;
-    border:1px solid rgba(0,0,0,.06); border-top:none;
+    padding:14px 16px 6px; border-radius:0 0 14px 14px;
+    background:var(--glass-dark); color:#fff;
+    border:1px solid var(--glass-dark-brd); border-top:none;
   }
   .credits{ margin:8px 0 14px }
-  .credit{ text-align:right; font-weight:700; }
+  .credit{ text-align:right; font-weight:700; color:#fff }
+
+  /* 出演者ページは左揃えに上書き */
+  #page-perf .credit{ text-align:left; }
+
+  /* 休憩ライン */
+  .breakline{
+    text-align:center; color:#fff; font-weight:800;
+    letter-spacing:.12em; margin:28px 0; opacity:.95;
+  }
 
   /* フォーム */
   form{ display:grid; gap:14px; margin-top:10px }
@@ -138,13 +152,12 @@
     box-shadow:0 10px 24px rgba(0,0,0,.35);
   }
 
-  /* 小さめ画面の内側余白少し広げ */
   @media (max-width:520px){
     .page{ padding:70px 14px 96px }
   }
 </style>
 
-<!-- ここで Splash の文字だけ白固定 -->
+<!-- Splash 文字は白固定 -->
 <style>
   #splash .posterInner,
   #splash .logo,
@@ -168,7 +181,7 @@
     <h1 class="ttl">抗う音、芽吹く</h1>
     <div class="sub">ハーラル・セーヴェルー / 作風変容の軌跡【前編】</div>
     <div class="meta">日時：2025年12月2日（火）　18:30開場 / 19:00開演　｜　会場：東京藝術大学 音楽学部 第6ホール</div>
-    <div class="enter"><a href="#menu" class="btn" onclick="openMenu(event)">タップして続く</a></div>
+    <div class="enter"><a href="#" class="btn" onclick="openMenu(event)">タップして続く</a></div>
   </div>
 </section>
 
@@ -176,12 +189,11 @@
 <section id="menu" class="page">
   <div class="wrap">
     <div class="backBtn" onclick="goSplash()">← 戻る</div>
-
     <div class="menuList">
-      <a class="glass menuItem" href="#page-start"    onclick="showPage(event,'page-start')">はじまり</a>
-      <a class="glass menuItem" href="#page-program"  onclick="showPage(event,'page-program')">プログラム</a>
-      <a class="glass menuItem" href="#page-perf"     onclick="showPage(event,'page-perf')">出演者</a>
-      <a class="glass menuItem" href="#page-survey"   onclick="showPage(event,'page-survey')">アンケート</a>
+      <a class="glass menuItem" href="#" onclick="showPage(event,'page-start')">はじまり</a>
+      <a class="glass menuItem" href="#" onclick="showPage(event,'page-program')">プログラム</a>
+      <a class="glass menuItem" href="#" onclick="showPage(event,'page-perf')">出演者</a>
+      <a class="glass menuItem" href="#" onclick="showPage(event,'page-survey')">アンケート</a>
     </div>
   </div>
 </section>
@@ -189,6 +201,7 @@
 <!-- ===== Page: はじまり ===== -->
 <section id="page-start" class="page">
   <div class="pageWrap glass fadeIn">
+    <div class="backBtn" onclick="backToMenu()">← 戻る</div>
     <h2>はじまり</h2>
 
     <p>　この度は、私の第一回博士リサイタルにお越しくださり、誠にありがとうございます。ファゴット専攻博士一年の聶 浩軒（ジョウ コウケン）と申します。</p>
@@ -207,6 +220,7 @@
 <!-- ===== Page: プログラム ===== -->
 <section id="page-program" class="page">
   <div class="pageWrap glass fadeIn">
+    <div class="backBtn" onclick="backToMenu()">← 戻る</div>
     <h2>プログラム</h2>
 
     <h3>第1部：戦前作品</h3>
@@ -217,7 +231,7 @@
         <p>　チェロ協奏曲は、セーヴェルーが残した5曲の協奏曲の中で最初に作曲された作品です。激しく情熱的で、ときに無調的な響きをともない、表現主義的な性格を色濃く示しており、彼の初期様式をよく表しています。ピアノは単なる伴奏ではなく、あたかもチェロと競い合うように対話を重ね、熱気あふれる音楽をつくり出しています。</p>
         <p>　この協奏曲は長いあいだ未完成のままで、セーヴェルー自身がオーケストレーションに満足できず、ピアノ伴奏版のみが残されました。1954年には、本人によって再びオーケストラ版の完成が試みられましたが、それでも納得には至らず、最終的にスコアは未完成のまま残されています。</p>
         <p>　セーヴェルーの死後、親友でありファゴット奏者・作曲家でもあるロベルト・レンネス（Robert Rønnes）によって補筆が行われ、ようやく1999年になってオーケストラ版の初演が実現しました。</p>
-        <p>　全体は三楽章構成ですが、現在入手できるのは、セーヴェルー自筆による第1楽章のピアノ伴奏版のみです。本日はその楽章をもとに、ファゴット用に必要な調整を加えた形で演奏いたします。</p>
+        <p>　全体は三楽章構成ですが、現在入手できるのは、セーヴルー自筆による第1楽章のピアノ伴奏版のみです。本日はその楽章をもとに、ファゴット用に必要な調整を加えた形で演奏いたします。</p>
         <div class="credits">
           <p class="credit">ファゴット：聶 浩軒</p>
           <p class="credit">ピアノ：横山 希</p>
@@ -262,6 +276,8 @@
         </div>
       </div>
     </details>
+
+    <div class="breakline">~ 10分間休憩 ~</div>
 
     <h3>第2部：戦中作品</h3>
 
@@ -321,6 +337,7 @@
 <!-- ===== Page: 出演者 ===== -->
 <section id="page-perf" class="page">
   <div class="pageWrap glass fadeIn">
+    <div class="backBtn" onclick="backToMenu()">← 戻る</div>
     <h2>出演者およびスタッフ</h2>
 
     <h3>出演者</h3>
@@ -352,6 +369,7 @@
 <!-- ===== Page: アンケート ===== -->
 <section id="page-survey" class="page">
   <div class="pageWrap glass fadeIn">
+    <div class="backBtn" onclick="backToMenu()">← 戻る</div>
     <h2>アンケート</h2>
 
     <p>　最後までお聴きいただき、誠にありがとうございます。<br>
@@ -377,9 +395,15 @@
 
 <script>
   const P = id => document.getElementById(id);
+  function toTopNow(){ window.scrollTo(0,0); setTimeout(()=>window.scrollTo(0,0),0); }
   function openMenu(e){ e && e.preventDefault(); swap('splash','menu'); }
   function goSplash(){ swap('menu','splash'); }
-  function showPage(e,id){ e && e.preventDefault(); // 第3階層へ
+  function backToMenu(){ // 第3階層 → メニュー
+    ['page-start','page-program','page-perf','page-survey'].forEach(s => P(s).classList.remove('show'));
+    swap('page-start','menu'); // 任意IDでhide→show処理
+  }
+  function showPage(e,id){
+    e && e.preventDefault();
     ['page-start','page-program','page-perf','page-survey'].forEach(s => P(s).classList.remove('show'));
     P(id).classList.add('show');
     swap('menu', id);
@@ -387,7 +411,9 @@
   function swap(hideId, showId){
     P(hideId).classList.remove('show');
     P(showId).classList.add('show');
-    window.scrollTo({top:0, behavior:'instant'});
+    toTopNow();
+    // クリアhash（意図せぬ自動スクロール防止）
+    if(history.pushState){ history.pushState("", document.title, window.location.pathname + window.location.search); }
   }
   // 初期状態
   P('splash').classList.add('show');
