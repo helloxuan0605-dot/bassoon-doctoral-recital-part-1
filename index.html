@@ -2,296 +2,494 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>第一回 聶浩軒 ファゴット博士リサイタル｜デジタル・プログラム</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>第一回 聶浩軒 ファゴット博士リサイタル｜電子版プログラム</title>
+<link rel="preload" as="image" href="assets/img/poster-bg.jpg" />
 <style>
-:root{
-  --fg:#fff;
-  --fg-dim:rgba(255,255,255,.85);
-  --glass-bg:rgba(20,24,28,.38);
-  --glass-bd:rgba(255,255,255,.18);
-  --glass-shadow:0 20px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
-  --radius:22px;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0; color:var(--fg);
-  font-family:"Noto Sans JP",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
-  line-height:1.8; -webkit-font-smoothing:antialiased;
-  background:#000; overflow-x:hidden;
-}
+  :root{
+    --glass-bg: rgba(20,20,24,.28);
+    --glass-br: rgba(255,255,255,.24);
+    --text: #ffffff;
+    --muted: rgba(255,255,255,.8);
+    --title: #ffffff;
+    --accent: rgba(255,255,255,.92);
+    --card-gap: clamp(16px, 2.2vw, 28px);
+    --max-w: 980px;
+    --radius-xl: 24px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  html,body{
+    margin:0; color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+    background:#000; overflow-x:hidden;
+  }
 
-/* 背景 */
-.bg{position:fixed; inset:0; background:url("assets/img/poster-bg.jpg") center/cover no-repeat fixed; z-index:-2;}
-.bg::after{content:""; position:absolute; inset:0;
-  background:
-    radial-gradient(70% 100% at 50% 15%, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 70%, rgba(0,0,0,.55) 100%),
-    linear-gradient(to bottom, rgba(0,0,0,.25), rgba(0,0,0,.55));
-}
+  /* 背景 */
+  .bg{
+    position:fixed; inset:0; z-index:-2;
+    background:url(assets/img/poster-bg.jpg) center/cover no-repeat fixed;
+    transform:translateZ(0);
+  }
+  /* 顶部暗角+雾化统一 */
+  .bg::after{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(1200px 600px at 50% -200px, rgba(0,0,0,.0), rgba(0,0,0,.45) 75%) ,
+               linear-gradient(to bottom, rgba(0,0,0,.35), transparent 28%, rgba(0,0,0,.35));
+    backdrop-filter:saturate(115%) blur(0.5px);
+  }
 
-/* 视图 */
-.view{display:none; min-height:100vh; padding:24px 20px 96px;}
-.view.active{display:block; animation:fade .6s ease both}
-@keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+  /* 通用淡入 */
+  .fade-in{animation:fade .5s ease both}
+  @keyframes fade{from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none}}
 
-/* 海报首屏 */
-.hero{
-  min-height:100vh; display:grid; place-content:center; text-align:center; padding:64px 24px 120px;
-}
-.hero h1{
-  margin:0 0 14px; font-family:"Noto Serif JP",serif; font-weight:900;
-  letter-spacing:.15em; font-size:clamp(34px,6.2vw,64px);
-  text-shadow:0 4px 24px rgba(0,0,0,.6);
-}
-.hero .lead{
-  font-family:"Noto Serif JP",serif; font-weight:700; font-size:clamp(14px,2.6vw,22px);
-  letter-spacing:.12em; margin:0 0 18px; color:var(--fg-dim); text-shadow:0 3px 18px rgba(0,0,0,.6)
-}
-.hero .meta{opacity:.95; text-shadow:0 2px 12px rgba(0,0,0,.6)}
+  /* 首屏 */
+  .hero{
+    min-height:100svh; display:grid; place-items:center; text-align:center; padding:72px 20px 96px;
+  }
+  .hero h1{font-weight:800; letter-spacing:.04em; margin:.2em 0 .1em; line-height:1.15;
+    font-size:clamp(34px, 6vw, 64px); color:var(--title);
+    text-shadow:0 2px 18px rgba(0,0,0,.45);
+  }
+  .hero h2{font-size:clamp(14px,2.4vw,22px); font-weight:600; color:var(--accent); margin:.2rem 0 1.2rem}
+  .hero .meta{color:var(--muted); font-size:clamp(13px,1.9vw,18px)}
+  .pill{
+    display:inline-block; margin-top:22px; padding:10px 18px;
+    color:#fff; border:1px solid var(--glass-br);
+    background:rgba(255,255,255,.08);
+    backdrop-filter: blur(10px) saturate(120%);
+    border-radius:999px; font-weight:700; letter-spacing:.08em;
+    box-shadow:0 6px 24px rgba(0,0,0,.3);
+    transition:.2s transform ease,.2s box-shadow ease,.2s background ease;
+    cursor:pointer; user-select:none;
+  }
+  .pill:hover{transform:translateY(-1px); box-shadow:0 10px 28px rgba(0,0,0,.38); background:rgba(255,255,255,.12)}
 
-/* 毛玻璃卡片 */
-.glass{
-  background:var(--glass-bg);
-  border:1px solid var(--glass-bd);
-  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-  border-radius:var(--radius);
-  box-shadow:var(--glass-shadow);
-}
+  /* 页容器 */
+  section.page{min-height:100svh; display:none; padding:80px 18px 120px}
+  section.page.active{display:block}
 
-/* 二级菜单布局（进入即可看到按钮） */
-.menu-wrap{min-height:100vh; display:grid; grid-template-rows:auto 1fr;}
-.menu-body{display:grid; place-content:center; padding:24px; gap:28px;}
-/* 二级菜单按钮 = 毛玻璃 + 白字（与戻る风格一致） */
-.menu-btn{
-  display:flex; align-items:center; justify-content:center;
-  width:min(860px, 92vw); height:120px; margin:0 auto;
-  font-family:"Noto Serif JP",serif; font-weight:700;
-  font-size:clamp(22px,3.6vw,34px); letter-spacing:.12em;
-  color:var(--fg);
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.55);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  border-radius:28px;
-  box-shadow:0 12px 40px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.25);
-  transition:transform .12s ease, box-shadow .2s ease, background .2s ease;
-}
-.menu-btn:hover{transform:translateY(-2px); background:rgba(255,255,255,.18); box-shadow:0 18px 50px rgba(0,0,0,.45), inset 0 1px rgba(255,255,255,.3)}
-.menu-btn:active{transform:translateY(0) scale(.99)}
+  /* 顶部返回 */
+  .topbar{
+    position:sticky; top:0; z-index:3; padding:14px 0 10px;
+    display:flex; justify-content:flex-start;
+  }
+  .back-btn{
+    composes:pill;
+  }
+  .back-btn{
+    display:inline-flex; align-items:center; gap:.5em;
+    padding:8px 14px; font-weight:700; font-size:14px;
+  }
+  .back-btn svg{width:16px;height:16px}
 
-/* 三级页面 */
-.page-head{display:flex; align-items:center; gap:14px; margin:8px 0 22px;}
-.page-title{font-family:"Noto Serif JP",serif; font-weight:900; letter-spacing:.14em; font-size:clamp(22px,3.6vw,36px); text-shadow:0 3px 16px rgba(0,0,0,.55)}
-.page-card{width:min(1100px,92vw); margin:0 auto 26px; padding:28px 24px;}
-.page-card h3{font-family:"Noto Serif JP",serif; font-weight:800; letter-spacing:.12em; font-size:clamp(18px,2.6vw,26px); margin:0 0 12px;}
-.page-card p{margin:.2em 0 1em}
-.sep{width:min(1100px,92vw); margin:28px auto; text-align:center; letter-spacing:.18em; color:var(--fg-dim); text-shadow:0 2px 12px rgba(0,0,0,.5)}
-/* 程序里的右对齐演奏者行（整段靠右，不做均匀分配） */
-.credit-right{ text-align:right; font-weight:700; letter-spacing:.05em; white-space:normal; }
+  /* 菜单卡（毛玻璃 + 白字） */
+  .menu{
+    max-width:700px; margin:0 auto; display:grid; gap:var(--card-gap);
+    padding:12px 0 0;
+  }
+  .menu .card{
+    border-radius:var(--radius-xl);
+    background:var(--glass-bg);
+    border:1px solid var(--glass-br);
+    backdrop-filter: blur(10px) saturate(120%);
+    box-shadow:0 12px 40px rgba(0,0,0,.35);
+    color:#fff; text-align:center; padding:34px 16px; font-weight:800; font-size:clamp(22px,4.2vw,30px);
+    cursor:pointer; transition:.2s transform ease,.2s box-shadow ease,.2s background ease;
+  }
+  .menu .card:hover{transform:translateY(-2px); box-shadow:0 18px 56px rgba(0,0,0,.45); background:rgba(255,255,255,.22)}
 
-/* 胶囊按钮（戻る / 继续） */
-.pill{
-  display:inline-flex; align-items:center; gap:.4em;
-  border-radius:999px; padding:10px 16px;
-  background:rgba(255,255,255,.12); color:var(--fg);
-  border:1px solid rgba(255,255,255,.6);
-  box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px rgba(255,255,255,.25);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  cursor:pointer; font-weight:700;
-}
-.pill:hover{background:rgba(255,255,255,.18)}
-.pill:active{transform:translateY(1px)}
-.topbar{position:sticky; top:12px; z-index:20; padding-left:8px}
-.center{display:flex; justify-content:center; margin-top:22px}
+  /* 内容容器（毛玻璃） */
+  .panel{
+    max-width:var(--max-w); margin:0 auto;
+    background:var(--glass-bg);
+    border:1px solid var(--glass-br);
+    backdrop-filter: blur(10px) saturate(120%);
+    box-shadow:0 18px 60px rgba(0,0,0,.45);
+    border-radius:var(--radius-xl);
+    padding:clamp(16px,2.6vw,28px) clamp(16px,3vw,32px);
+  }
+  .panel h3{margin:.4em 0 .6em; font-size:clamp(22px,3.4vw,30px)}
+  .panel p{line-height:1.9; color:var(--muted); font-size:clamp(15px,1.9vw,18px)}
+  .hr{height:1px; background:rgba(255,255,255,.14); margin:26px 0}
 
-/* 页脚 */
-footer{position:fixed; inset:auto 0 10px 0; text-align:center; z-index:5; font-size:12px; letter-spacing:.12em; color:rgba(255,255,255,.85); text-shadow:0 2px 10px rgba(0,0,0,.65); pointer-events:none;}
-/* 文本可读性 */
-.page-card p, .page-card li{color:var(--fg-dim)}
-ul{padding-left:1.1em}
+  /* —— Program：折叠条 —— */
+  .piece{border:1px solid rgba(255,255,255,.25); border-radius:16px; overflow:hidden; margin:16px 0; background:rgba(0,0,0,.18)}
+  .piece-header{
+    width:100%; background:linear-gradient(to bottom, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    padding:16px 18px; color:#fff; text-align:left; cursor:pointer; border:0; display:flex; justify-content:space-between; align-items:center; gap:10px;
+  }
+  .piece-title{font-weight:800; font-size:clamp(16px,2.2vw,20px)}
+  .piece-sub{font-size:12.5px; opacity:.85; margin-top:4px}
+  .piece-left{display:flex; flex-direction:column}
+  .caret{transition:transform .2s ease}
+  .piece.open .caret{transform:rotate(90deg)}
+  .piece-body{display:none; padding:0 18px 16px}
+  .piece.open .piece-body{display:block; animation:fade .25s ease both}
+  .piece-body p{margin:12px 0}
+  .performers{list-style:none; padding:0; margin:14px 0 4px}
+  /* 节目下方的演奏者：右对齐、一行一个 */
+  .performers.right{ text-align:right }
+  .performers.right li{ padding:2px 0 }
+  /* 出演者页面：左对齐、一行一个 */
+  .cast-list{list-style:none; padding-left:0; margin:0}
+  .cast-list li{padding:6px 0; border-bottom:1px dashed rgba(255,255,255,.12)}
+  .cast-list li:last-child{border-bottom:0}
+
+  /* 休憩分隔 */
+  .intermission{
+    margin:24px 0; text-align:center; color:var(--accent); font-weight:800; letter-spacing:.08em
+  }
+
+  footer{
+    position:fixed; inset:auto 0 0 0; z-index:0; text-align:center; padding:10px 12px 12px;
+    color:rgba(255,255,255,.78); font-size:12.5px;
+    background:linear-gradient(to top, rgba(0,0,0,.38), rgba(0,0,0,0));
+    -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  }
+
+  /* 移动端优化与居中修正 */
+  @media (max-width: 640px){
+    .panel{padding:18px 16px}
+    .menu{padding-top:6px}
+    .hero{padding:64px 16px 96px}
+  }
 </style>
 </head>
 <body>
-<div class="bg" aria-hidden="true"></div>
+  <div class="bg"></div>
 
-<!-- 首屏 -->
-<section id="splash" class="view active">
-  <div class="hero">
-    <p class="lead">第一回 聶浩軒 ファゴット博士リサイタル</p>
-    <h1>抗う音、芽吹く</h1>
-    <p class="lead">ハーラル・セーヴェルー／作風変容の軌跡【前編】</p>
-    <p class="meta">日時：2025年12月2日（火）　18:30開場／19:00開演｜会場：東京藝術大学 音楽学部 第6ホール</p>
-    <div class="center"><button class="pill" data-go="menu">タッチして続く</button></div>
-  </div>
-</section>
-
-<!-- 二级菜单：毛玻璃白字 -->
-<section id="menu" class="view">
-  <div class="menu-wrap">
-    <div class="topbar"><button class="pill" data-go="splash">← 戻る</button></div>
-    <div class="menu-body">
-      <button class="menu-btn" data-go="start">はじまり</button>
-      <button class="menu-btn" data-go="program">プログラム</button>
-      <button class="menu-btn" data-go="cast">出演者</button>
-      <button class="menu-btn" data-go="survey">アンケート</button>
+  <!-- 首屏 -->
+  <header class="hero fade-in" id="home">
+    <div>
+      <div style="font-weight:700; opacity:.9">第一回 聶浩軒 ファゴット博士リサイタル</div>
+      <h1>抗う音、芽吹く</h1>
+      <h2>ハーラル・セーヴェルー / 作風変容の軌跡【前編】</h2>
+      <div class="meta">日時：2025年12月2日（火） 18:30開場 / 19:00開演 ｜ 会場：東京藝術大学 音楽学部 第6ホール</div>
+      <div class="pill" data-go="menu">タップして続く</div>
     </div>
-  </div>
-</section>
+  </header>
 
-<!-- はじまり -->
-<section id="start" class="view">
-  <div class="topbar"><button class="pill" data-go="menu">← 戻る</button></div>
-  <div class="page-card glass">
-    <div class="page-head"><h2 class="page-title">はじまり</h2></div>
-    <p>　この度は、私の第一回博士リサイタルにお越しくださり、誠にありがとうございます。ファゴット専攻博士一年の聶 浩軒（ジョウ コウケン）と申します。</p>
-    <p>　今回のリサイタルでは、ノルウェーの作曲家ハーラル・セーヴェルー（Harald Sæverud, 1897–1992）が1945年までに残した25作品の中から、ファゴットで演奏可能な重要な作品を取り上げます。そして、ナチスによるノルウェー占領という決定的な時代が、彼の創作にどのような影響を与えたのかを、音楽を通して直観的にたどっていくことを目的としています。</p>
-    <p>　セーヴェルーはノルウェー楽壇の「大長老」とも呼ばれる存在ですが、その国際的な知名度は、同郷のエドヴァルド・グリーグ（Edvard Grieg）ほど高くはありません。しかし、北欧やアメリカなど、特定の地域においては、今なお大きな影響力を持つ作曲家であると考えています。その一因として、彼の創作の拠点がベルリンやパリといった国際的な芸術都市ではなく、生涯を通して故郷ベルゲンに置かれていたことが挙げられます。国外で活動した時期も何度かありましたが、いずれも短期間で、最終的には必ず地元へ戻っています。</p>
-    <p>　とはいえ、それは決して「国際的な才能がなかった」ということではありません。セーヴェルーは18歳のときに独学で交響曲の作曲を始め、その作品によってベルリン芸術大学への留学を認められ、フリードリヒ・E・コッホ（Friedrich E. Koch）に師事しました。さらにベルリン滞在中には、彼の作品がベルリン・フィルハーモニー管弦楽団によって初演されています。しかし、セーヴェルー自身にとって、ベルリンは多くを学べる場所ではあったものの、ベルゲンにいるときのように自然に作曲のアイデアが湧き上がる場所ではなかったようです。そのため、わずか一年ほどで帰郷することを選びました。</p>
-    <p>　こうして地元を拠点としながらも、彼の作品は非常にアヴァンギャルドな性格を持っていました。評論家からは「セーヴェルーの音楽は、アルノルト・シェーンベルク（Arnold Schönberg）の作品のように耳をいじめる。しかしシェーンベルクの“いじめ”はすぐ終わるのに対し、セーヴェルーの“いじめ”は永遠に終わらない」と評されたこともあります。そのような独自性ゆえに、ベルゲンに戻った当初は作品がなかなか受け入れられず、厳しい時期も経験しました。</p>
-    <p>　貧しい生活に陥っても、セーヴェルーは自らの作曲スタイル――新古典主義的でありながら、ときに無調的な書法を用いる、きわめて個人的な語法――を決して手放しませんでした。「耳が痛くなるような旋律こそ、真実である」。この言葉は、セーヴェルーの作曲哲学そのものをよく表していると思います。</p>
-    <p>　本格的に名声を確立したのは、まさに1940年から1945年までのナチス占領期でした。この5年間、セーヴェルーは「国家社会主義に対する音楽的レジスタンスの象徴」として、反ナチス的な意味を内包する作品を次々と発表しました。侵略下という過酷な状況の中で、怒りや悲しみ、そして希望を音楽に託し、わずか5年間で12作品を生み出し、その半数が交響曲という大規模な形式でした。以前から「耳が痛くなるほど真実な旋律」は、ここでレジスタンスとしての性格を强く帯び、占領下のノルウェーの人々に向けて現実を告げる警告となると同時に、ナチスへの鋭い攻撃にもなりました。</p>
-    <p>　同時に、この経験はセーヴェルーの作曲スタイルに、柔軟で「外」に开かれた一面ももたらしました。それまでの、きわめて個人的なスタイルにとどまらず、民族全体の声をも背負って鳴り響く音楽へと変化していったのです。この時期に、彼の作曲スタイルはついに成熟し、ノルウェーを代表する作曲家の一人として位置づけられるようになりました。その後の時期にも多少の変化は見られますが、主に編成が小さくなる方向であり、この占領期ほど劇的な転換は見られません。</p>
-    <p>　つまり、セーヴェルーの作曲スタイルを論じるうえで、この占領された5年間に注目することは避けて通れません。彼の作曲スタイルはどのようなプロセスで変化していったのか。とりわけ、個人主義的な「耳に痛い旋律」が、どのようにして戦時の「レジスタンス性」へと転化していったのか。セーヴェルーはいかにして「国家社会主義に対する音楽的レジスタンスの象徴」となったのか。戦時中に生まれた新たな作曲上の特徴は、ナチスへのレジスタンスからどのような影響を受けているのか。そして、そうした新しい要素が、彼本来のスタイルとどのように结びつき、戦後の作品にどのように受け継がれていったのか。これらの問いを課题として、博士課程の論文「ハーラル・セーヴェルーの作曲スタイル――レジスタンス性の視点から――」の中で明らかにしていきたいと考えています。</p>
-    <p>　本日のリサイタルでは、この研究の一环として、セーヴェルーの戦前および戦中の作品を作曲年代顺に演奏いたします。纯粹に个人的な表現から出発し、やがて民族感情をも背负って响くスタイルへと向かっていく、その変化の轨迹を、音楽とともに感じていただけましたら幸いです。</p>
-  </div>
-</section>
+  <!-- 二级菜单 -->
+  <section class="page" id="menu">
+    <div class="topbar">
+      <button class="back-btn" data-go="home" aria-label="戻る">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        戻る
+      </button>
+    </div>
+    <div class="menu fade-in">
+      <div class="card" data-go="start">はじまり</div>
+      <div class="card" data-go="program">プログラム</div>
+      <div class="card" data-go="cast">出演者</div>
+      <div class="card" data-go="survey">アンケート</div>
+    </div>
+  </section>
 
-<!-- プログラム -->
-<section id="program" class="view">
-  <div class="topbar"><button class="pill" data-go="menu">← 戻る</button></div>
+  <!-- 三级：はじまり -->
+  <section class="page" id="start">
+    <div class="topbar">
+      <button class="back-btn" data-go="menu">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        戻る
+      </button>
+    </div>
 
-  <div class="page-card glass">
-    <div class="page-head"><h2 class="page-title">第1部：戦前作品</h2></div>
+    <article class="panel fade-in">
+      <h3>はじまり</h3>
+      <div class="hr"></div>
+      <p>　この度は、私の第一回博士リサイタルにお越しくださり、誠にありがとうございます。ファゴット専攻博士一年の聶 浩軒（ジョウ コウケン）と申します。</p>
+      <p>　今回のリサイタルでは、ノルウェーの作曲家ハーラル・セーヴェルー（Harald Sæverud, 1897–1992）が1945年までに残した25作品の中から、ファゴットで演奏可能な重要な作品を取り上げます。そして、ナチスによるノルウェー占領という決定的な時代が、彼の創作にどのような影響を与えたのかを、音楽を通して直観的にたどっていくことを目的としています。</p>
+      <p>　セーヴェルーはノルウェー楽壇の「大長老」とも呼ばれる存在ですが、その国際的な知名度は、同郷のエドヴァルド・グリーグ（Edvard Grieg）ほど高くはありません。しかし、北欧やアメリカなど、特定の地域においては、今なお大きな影響力を持つ作曲家であると考えています。その一因として、彼の創作の拠点がベルリンやパリといった国際的な芸術都市ではなく、生涯を通して故郷ベルゲンに置かれていたことが挙げられます。国外で活動した時期も何度かありましたが、いずれも短期間で、最終的には必ず地元へ戻っています。</p>
+      <p>　とはいえ、それは決して「国際的な才能がなかった」ということではありません。セーヴェルーは18歳のときに独学で交響曲の作曲を始め、その作品によってベルリン芸術大学への留学を認められ、フリードリヒ・E・コッホ（Friedrich E. Koch）に師事しました。さらにベルリン滞在中には、彼の作品がベルリン・フィルハーモニー管弦楽団によって初演されています。しかし、セーヴェルー自身にとって、ベルリンは多くを学べる場所ではあったものの、ベルゲンにいるときのように自然に作曲のアイデアが湧き上がる場所ではなかったようです。そのため、わずか一年ほどで帰郷することを選びました。</p>
+      <p>　こうして地元を拠点としながらも、彼の作品は非常にアヴァンギャルドな性格を持っていました。評論家からは「セーヴェルーの音楽は、アルノルト・シェーンベルク（Arnold Schönberg）の作品のように耳をいじめる。しかしシェーンベルクの“いじめ”はすぐ終わるのに対し、セーヴェルーの“いじめ”は永遠に終わらない」と評されたこともあります。そのような独自性ゆえに、ベルゲンに戻った当初は作品がなかなか受け入れられず、厳しい時期も経験しました。</p>
+      <p>　貧しい生活に陥っても、セーヴェルーは自らの作曲スタイル――新古典主義的でありながら、ときに無調的な書法を用いる、きわめて個人的な語法――を決して手放しませんでした。「耳が痛くなるような旋律こそ、真実である」。この言葉は、セーヴェルーの作曲哲学そのものをよく表していると思います。</p>
+      <p>　本格的に名声を確立したのは、まさに1940年から1945年までのナチス占領期でした。この5年間、セーヴェルーは「国家社会主義に対する音楽的レジスタンスの象徴」として、反ナチス的な意味を内包する作品を次々と発表しました。侵略下という過酷な状況の中で、怒りや悲しみ、そして希望を音楽に託し、わずか5年間で12作品を生み出し、その半数が交響曲という大規模な形式でした。以前から「耳が痛くなるほど真実な旋律」は、ここでレジスタンスとしての性格を強く帯び、占領下のノルウェーの人々に向けて現実を告げる警告となると同時に、ナチスへの鋭い攻撃にもなりました。</p>
+      <p>　同時に、この経験はセーヴェルーの作曲スタイルに、柔軟で「外」に開かれた一面ももたらしました。それまでの、きわめて個人的なスタイルにとどまらず、民族全体の声をも背負って鳴り響く音楽へと変化していったのです。この時期に、彼の作曲スタイルはついに成熟し、ノルウェーを代表する作曲家の一人として位置づけられるようになりました。その後の時期にも多少の変化は見られますが、主に編成が小さくなる方向であり、この占領期ほど劇的な転換は見られません。</p>
+      <p>　つまり、セーヴェルーの作曲スタイルを論じるうえで、この占領された5年間に注目することは避けて通れません。彼の作曲スタイルはどのようなプロセスで変化していったのか。とりわけ、個人主義的な「耳に痛い旋律」が、どのようにして戦時の「レジスタンス性」へと転化していったのか。セーヴェルーはいかにして「国家社会主義に対する音楽的レジスタンスの象徴」となったのか。戦時中に生まれた新たな作曲上の特徴は、ナチスへのレジスタンスからどのような影響を受けているのか。そして、そうした新しい要素が、彼本来のスタイルとどのように結びつき、戦後の作品にどのように受け継がれていったのか。これらの問いを課題として、博士課程の論文「ハーラル・セーヴェルーの作曲スタイル――レジスタンス性の視点から――」の中で明らかにしていきたいと考えています。</p>
+      <p>　本日のリサイタルでは、この研究の一環として、セーヴェルーの戦前および戦時中の作品を作曲年代順に演奏いたします。純粋に個人的な表現から出発し、やがて民族感情をも背負って響くスタイルへと向かっていく、その変化の軌跡を、音楽とともに感じていただけましたら幸いです。</p>
+    </article>
+  </section>
 
-    <h3>1. チェロ協奏曲 作品7 第一楽章（1930–1931）</h3>
-    <p>　チェロ協奏曲は、セーヴェルーが残した5曲の協奏曲の中で最初に作曲された作品です。激しく情熱的で、ときに無調的な響きをともない、表現主義的な性格を色濃く示しており、彼の初期様式をよく表しています。ピアノは単なる伴奏ではなく、あたかもチェロと競い合うように対話を重ね、熱気あふれる音楽をつくり出しています。</p>
-    <p>　この協奏曲は長いあいだ未完成のままで、セーヴェルー自身がオーケストレーションに満足できず、ピアノ伴奏版のみが残されました。1954年には、本人によって再びオーケストラ版の完成が試みられましたが、それでも納得には至らず、最終的にスコアは未完成のまま残されています。</p>
-    <p>　セーヴェルーの死後、親友でありファゴット奏者・作曲家でもあるロベルト・レンネス（Robert Rønnes）によって補筆が行われ、ようやく1999年になってオーケストラ版の初演が実現しました。</p>
-    <p>　全体は三楽章構成ですが、現在入手できるのは、セーヴェルー自筆による第1楽章のピアノ伴奏版のみです。本日はその楽章をもとに、ファゴット用に必要な調整を加えた形で演奏いたします。</p>
-    <p class="credit-right">ファゴット：聶 浩軒 ／ ピアノ：横山 希</p>
+  <!-- 三级：プログラム（可折叠） -->
+  <section class="page" id="program">
+    <div class="topbar">
+      <button class="back-btn" data-go="menu">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        戻る
+      </button>
+    </div>
 
-    <h3>2. フルートと弦楽のための嬉遊曲 第1番 作品13（1939）</h3>
-    <p>　この作品は、ドイツの音楽教育者ヒルマル・ヘックナー（Hilmar Höckner）の依頼により、教育目的で作曲されました。シリーズの第1作としてフルートと弦楽のために書かれ、ヘックナーとセーヴェルーは教育用の連作として続編も構想していましたが、第二次世界大戦の勃発によって計画は中止となり、結果的にこの1曲だけが残されました。</p>
-    <p>　教育目的で依頼されたこともあり、以前の作品に比べて明るく、親しみやすい作風となっています。しかしその変化は、単に教育的な理由だけではありません。この頃のセーヴェルーは「新音楽協会（Ny Musikk）」の副会長に就任し、アメリカの富豪の娘と結婚し、さらに都市部ではなく、創作のアイデアが湧きやすい自然豊かな郊外の荘園「シーリューステール（Siljustøl）」に移り住んだ時期でもありました。貧しく孤独だった時代を乗り越え、ようやく新しい生活を迎えた彼の心境が、この柔らかく温かな音楽にそのまま映し出されているように感じられます。もちろん、セーヴェルー特有の鋭い不協和音も随所に残っていますが、直前に発表された無調的な《オーボエ協奏曲》作品12（Konsert for obo og orkester, Op. 12）とは、大きく印象が異なります。</p>
-    <p>　この曲からもわかるように、セーヴェルーの作曲スタイルの変化には、生活環境の改善も大きく影響していたと考えられます。そして、この「生活の転換」があったからこそ、のちに戦時下でレジスタンス的な作品を書きうるだけの精神的な土台も育まれていったのではないかと思います。</p>
-    <p>　全4楽章で構成されており、フルートが突出した独奏楽器としてではなく、弦楽器と対等に響き合うアンサンブルとして書かれているのも特徴的です。</p>
-    <p><strong>第1楽章　Marcia（行進曲）</strong><br>　軍隊を率いるような重々しい行進曲ではなく、まるで北欧の森の小さな精霊たちが祝祭を行いながら、楽しそうに行進しているような情景が浮かびます。</p>
-    <p><strong>第2楽章　Amoroso（愛情をこめて）</strong><br>　いつもは個人的で無調な曲を書いているセーヴェルーが、「Amoroso（愛情をこめて）」と名付けた楽章を書いたというのは、やはり少し意外に感じられます。セーヴェルーにとって初めての「Amoroso」ですが、単に甘く抒情的なだけではなく、子どものいたずらのような仕草を通して、どこか不器用で温かい愛情が伝わってくる音楽です。</p>
-    <p><strong>第3楽章　Andante（アンダンテ）</strong><br>　初めて感情を伝えた後の、少し恥ずかしさを覚えながらも、穏やかであろうとする気持ちがにじむような音楽です。どこか落ち着かない、そわそわした感情も同時に支えていて、ときどき現れる変拍子は、次の変奏楽章への「心の準備」のようにも聞こえます。</p>
-    <p><strong>第4楽章　Variazioni continue（絶え間ない変奏）</strong><br>　この楽章は、3/4拍子と2/4拍子が絶え間なく入れ替わることで構成されています。3/4は歩み出す「動き」を、2/4は一息つくような「落ち着き」を感じさせ、これまでの3つの楽章で揺れ動いてきた心情の変化をよく映し出しているようです。譜面には「deciso（決然と）」という指示がありますが、これはこれまでの感情に対して決断を下すのか、それともそれまでの生活に別れを告げる決意なのか――解釈は想像に委ねられています。そして最後に書かれた「non rit.（テンポをゆるめない）」という指示には、これから訪れる変化を、決して止めたくないという意志が込められているように思われます。</p>
-    <p class="credit-right">ファゴット：聶 浩軒 ／ ヴァイオリン1st：小暮 莉加 ／ ヴァイオリン2nd：笠井 文昭 ／ ヴィオラ：由井 ひまり ／ チェロ：谷川 萌音 ／ コントラバス：山内 果連</p>
+    <div class="panel fade-in">
+      <h3>第1部：戦前作品</h3>
 
-    <h3>3. 《やさしい小曲集》より「ロンド・アモローソ」作品14-7（1939）</h3>
-    <p>　同じく1939年、セーヴェルーの生活がようやく安定し始めた頃に作曲されたピアノ曲集《やさしい小曲集》の最後の一曲です。《ロンド・アモローソ（Rondo Amoroso）》は、先ほど嬉遊曲の「Amoroso」の世界を受け継ぎつつ、より深い情感が込められた作品と言えるでしょう。</p>
-    <p>　セーヴェルーはしばしば自分のことを「世界で一番悲しい人」と語り、「私の作品は、何年かすれば誰にも忘れられてしまうだろう」とも話していました。しかし、その中で唯一、彼が心から満足していたのがこの《ロンド・アモローソ》です。彼はこう言いました――「少なくとも私は《ロンド・アモローソ》を作った！これだけは必ず後世に残るだろう。」実際にもそうなり、現在のノルウェーではピアノ学習者が必ず一度は勉強する代表的な一曲となっています。</p>
-    <p>　この作品は母親に献呈されたもので、タイトルの “Amoroso” は、親と子のあたたかな愛を意味しています。曲の着想は、ある日セーヴェルーがピアノで悲しげな旋律を弾いていたとき、息子との何気ない会話から生まれたと言われています。</p>
-    <p class="credit-right">ファゴット：聶 浩軒 ／ フルート：藤枝 麻里花 ／ オーボエ：古川 瑞記 ／ クラリネット：吉村 錬 ／ ホルン：直田 真潮</p>
-  </div>
+      <!-- 1 -->
+      <div class="piece">
+        <button class="piece-header" aria-expanded="false">
+          <div class="piece-left">
+            <div class="piece-title">1. チェロ協奏曲 作品7 第一楽章（1930–1931）</div>
+            <div class="piece-sub">Konsert for cello og orkester, Op. 7 (1930–31)</div>
+          </div>
+          <svg class="caret" width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2"/></svg>
+        </button>
+        <div class="piece-body">
+          <p>　チェロ協奏曲は、セーヴェルーが残した5曲の協奏曲の中で最初に作曲された作品です。激しく情熱的で、ときに無調的な響きをともない、表現主義的な性格を色濃く示しており、彼の初期様式をよく表しています。ピアノは単なる伴奏ではなく、あたかもチェロと競い合うように対話を重ね、熱気あふれる音楽をつくり出しています。</p>
+          <p>　この協奏曲は長いあいだ未完成のままで、セーヴェルー自身がオーケストレーションに満足できず、ピアノ伴奏版のみが残されました。1954年には、本人によって再びオーケストラ版の完成が試みられましたが、それでも納得には至らず、最終的にスコアは未完成のまま残されています。</p>
+          <p>　セーヴェルーの死後、親友でありファゴット奏者・作曲家でもあるロベルト・レンネス（Robert Rønnes）によって補筆が行われ、ようやく1999年になってオーケストラ版の初演が実現しました。</p>
+          <p>　全体は三楽章構成ですが、現在入手できるのは、セーヴェルー自筆による第1楽章のピアノ伴奏版のみです。本日はその楽章をもとに、ファゴット用に必要な調整を加えた形で演奏いたします。</p>
+          <ul class="performers right">
+            <li>ファゴット：聶 浩軒</li>
+            <li>ピアノ：横山 希</li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="sep">~ 10分間休憩 ~</div>
+      <!-- 2 -->
+      <div class="piece">
+        <button class="piece-header" aria-expanded="false">
+          <div class="piece-left">
+            <div class="piece-title">2. フルートと弦楽のための嬉遊曲 第1番 作品13（1939）</div>
+            <div class="piece-sub">Divertimento nr. 1 for fløyte og strykere, Op. 13 (1939)</div>
+          </div>
+          <svg class="caret" width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2"/></svg>
+        </button>
+        <div class="piece-body">
+          <p>　この作品は、ドイツの音楽教育者ヒルマル・ヘックナー（Hilmar Höckner）の依頼により、教育目的で作曲されました。シリーズの第1作としてフルートと弦楽のために書かれ、ヘックナーとセーヴェルーは教育用の連作として続編も構想していましたが、第二次世界大戦の勃発によって計画は中止となり、結果的にこの1曲だけが残されました。</p>
+          <p>　教育目的で依頼されたこともあり、以前の作品に比べて明るく、親しみやすい作風となっています。しかしその変化は、単に教育的な理由だけではありません。この頃のセーヴェルーは「新音楽協会（Ny Musikk）」の副会長に就任し、アメリカの富豪の娘と結婚し、さらに都市部ではなく、創作のアイデアが湧きやすい自然豊かな郊外の荘園「シーリューステール（Siljustøl）」に移り住んだ時期でもありました。…（中略）</p>
+          <p>　全4楽章で構成されており、フルートが突出した独奏楽器としてではなく、弦楽器と対等に響き合うアンサンブルとして書かれているのも特徴的です。</p>
+          <p><strong>第1楽章　Marcia（行進曲）</strong>… / <strong>第2楽章　Amoroso（愛情をこめて）</strong>… / <strong>第3楽章　Andante（アンダンテ）</strong>… / <strong>第4楽章　Variazioni continue（絶え間ない変奏）</strong>…</p>
+          <p>　今回は、フルートではなくファゴットと、各弦楽器1名ずつによる小編成で演奏いたします。</p>
+          <ul class="performers right">
+            <li>ファゴット：聶 浩軒</li>
+            <li>ヴァイオリン1st：小暮 莉加</li>
+            <li>ヴァイオリン2nd：笠井 文昭</li>
+            <li>ヴィオラ：由井 ひまり</li>
+            <li>チェロ：谷川 萌音</li>
+            <li>コントラバス：山内 果連</li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="page-card glass">
-    <div class="page-head"><h2 class="page-title">第2部：戦中作品</h2></div>
+      <!-- 3 -->
+      <div class="piece">
+        <button class="piece-header" aria-expanded="false">
+          <div class="piece-left">
+            <div class="piece-title">3. 《やさしい小曲集》より「ロンド・アモローソ」作品14-7（1939）</div>
+            <div class="piece-sub">Lette stykker, Rondo Amoroso, Op. 14–7 (1939)</div>
+          </div>
+          <svg class="caret" width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2"/></svg>
+        </button>
+        <div class="piece-body">
+          <p>　…（解説本文そのまま）</p>
+          <p>　今回は、A. オスカル・ホーグラン（A. Oscar Haugland）による木管五重奏版でお届けいたします。</p>
+          <ul class="performers right">
+            <li>ファゴット：聶 浩軒</li>
+            <li>フルート：藤枝 麻里花</li>
+            <li>オーボエ：古川 瑞記</li>
+            <li>クラリネット：吉村 錬</li>
+            <li>ホルン：直田 真潮</li>
+          </ul>
+        </div>
+      </div>
 
-    <h3>4. 木管五重奏第1番《シーリューステールからの歌と踊り》第1集 作品21a（1942）</h3>
-    <p>　本作は戦時中に書かれた作品で、セーヴェルーの自宅「シーリューステール」の名を掲げ、その周囲の自然を主題としたピアノ曲集《シーリューステールからの歌と踊り》第1集にあたります。全3集から成る連作のうちの最初の組曲です。</p>
-    <p>　シーリューステールはベルゲン郊外の高台に位置し、戦時中も直接的な被害は比較的少ない場所でした。一方で海に近いため、敵の動きをいち早く察知できる地形でもありました。そのためセーヴェルーは、抵抗運動に携わる人々をしばしば自宅にかくまい、敵側の動きがあれば抵抗組織に伝えていたと言われています。ちなみに、彼の兄はベルゲン地域のレジスタンスのリーダーであり、兄弟それぞれが自分のやり方で抵抗運動に関わっていました。</p>
-    <p>　同じ時期、セーヴェルーは《交響曲第5番〈幻想曲のように〉（Symfoni nr. 5, Quasi una fantasia）》のような、より直接的にナチスへの抵抗を示す作品も書いていますが、この組曲では主にノルウェーの自然と、その静けさが描かれています。</p>
-    <p>　なぜ、あのような厳しい戦時下で、これほど柔らかく繊細な作品が生まれたのでしょうか。その答えは、セーヴェルー自身の言葉――「困難な時代こそ、自然はより身近に感じられる」――にあるのかもしれません。この音楽には、戦争という現実のただ中でなお息づき続ける自然の、静かな呼吸が感じられます。</p>
-    <p><strong>第1楽章　Kristi-blodsdråper（キリストの血）</strong><br>　標題の「キリストの血」は宗教的な意味ではなく、実際にはフクシア（Fuchsia）という花のノルウェーにおける伝統的な呼び名です。真紅の花びらが、キリストの血の滴を思わせることからその名が付いたと言われています。花の名を借りて、自宅の庭やその周りに広がる自然の色彩を、音楽で描き出していきます。</p>
-    <p><strong>第2楽章　Dvergmålslått（ドワーフたちの歌）</strong><br>　「山びこの歌」とも訳されるタイトルで、セーヴェルーの想像の中では、小さなドワーフたちが山奥で自由に歌い、踊り回っている情景が広がります。その歌声が山びことなってこだまし、不思議な響きとして戻ってくる様子が音楽になっています。</p>
-    <p><strong>第3楽章　Bå’nlåt（子守歌）</strong><br>　子守歌でありながら、いわゆるゆったりとした「おやすみなさい」の雰囲気だけではありません。むしろ、寝る前に子どもとたくさん遊んで、最後は遊び疲れてそのまま眠ってしまったような、少し名残惜しくも温かな時間が感じられます。</p>
-    <p><strong>第4楽章　Kvellingsull og lokk（黄昏の歌と呼び声）</strong><br>　黄昏どき、羊飼いが家路につく動物たちを呼び集める場面を描いた楽章です。高音声部は羊飼いの呼び声や笛のような響きを、低音声部はゆっくりと戻ってくる動物たちの足取りを思わせます。セーヴェルーの家では実際に羊が飼われており、その広い敷地は戦時中、多くのレジスタンスの人々を静かに守る場所にもなっていました。</p>
-    <p><strong>第5楽章　Marcia Siljuana（シーリューステール行進曲）</strong><br>　自宅の名を冠した行進曲です。嬉遊曲の第1楽章のように軽やかな行進というだけでなく、どこか緊張感と厳粛さも漂っています。自宅の周りは一見穏やかであっても、戦争はまだ終わっていない――そのことを決して忘れてはならない、という静かな意志が感じられるようです。</p>
-    <p class="credit-right">ファゴット：聶 浩軒 ／ フルート：藤枝 麻里花 ／ オーボエ：古川 瑞記 ／ クラリネット：吉村 錬 ／ ホルン：直田 真潮</p>
+      <div class="intermission">〜 10分間休憩 〜</div>
 
-    <h3>5. ヴァイオリンとピアノのためのロマンス 作品23a（1942）</h3>
-    <p>　同じく戦時中に作曲された作品ですが、ここではナチスへの直接的な抵抗が描かれているわけでも、自然の風景が歌われているわけでもありません。セーヴェルーが「ロマンス」と題した作品はこの1曲だけであり、音楽は一つの歌のように、作曲家の内面的な抒情とやわらかな感情が穏やかに流れていきます。その一方で、その抒情の奥底からは、当時のノルウェーの現実を背景とした深い悲しみも静かににじみ出ているように感じられます。</p>
-    <p>　もともとはヴァイオリンとオーケストラのためのロマンスとして書かれましたが、同時期にピアノ伴奏版も制作され、1978年には改訂も施されました。今回は、そのピアノ伴奏版をもとに、ファゴットとピアノのための版として演奏いたします。</p>
-    <p class="credit-right">ファゴット：聶 浩軒 ／ ピアノ：横山 希</p>
+      <h3>第2部：戦中作品</h3>
 
-    <h3>6. 《シーリューステールからの歌と踊り》第2集より「クモの巣の糸の上で」作品22-4＆「抵抗のバラード」作品22-5（1943）</h3>
-    <p>　これら2曲は、ピアノ曲集《シーリューステールからの歌と踊り》第2集の第4曲と第5曲にあたります。戦況が悪化していくなかで、自然を描くはずの作品集の中にも、次第に戦争との関わりや「抵抗」の意識がにじみ出てきたと考えられます。とりわけこの2曲には、その傾向がはっきりと表れていると言えるでしょう。</p>
-    <p>　第4曲「クモの巣の糸の上で」は、単なる自然の描写にとどまらず、当時のノルウェーの状況を象徴しているとも言えます。蜘蛛の糸は細く、風に揺られて今にも切れてしまいそうに見えますが、実際には驚くほど強く、決して切れません。この音楽には、「ノルウェーもまた決して負けない」という静かな抵抗のメッセージが込められているように思われます。</p>
-    <p>　続く第5曲「抵抗のバラード」では、もはや象徴的な表現ではなく、タイトルそのものに「抵抗」という言葉が明示されています。サブタイトルには「ノルウェー抵抗運動に参加している戦士たちへ」と記されており、作曲者の思いはさらに直接的なかたちで示されています。</p>
-    <p>　この作品が生まれたきっかけは、1943年、セーヴェルーがオスロからベルゲンへ戻る途中の出来事でした。彼はドイツ軍による占領を嫌い、兵士の乗る列車を避けて、あえて時間のかかるバスで帰ることを選びます。バスの車窓から見える山や森の景色は穏やかで、まるで戦争など存在しないかのように美しく感じられたといいます。しかし、船に乗り換える際、周囲の山々がドイツ軍の兵舎でびっしりと覆われている光景を目にし、その瞬間に現実へ引き戻され、激しい怒りがこみ上げたとセーヴェルー自身が記しています。その怒りと呪いのような感情こそが、「抵抗のバラード」を生み出す原動力となりました。</p>
-    <p>　第4曲は横山 希さんによるソロ演奏で、休みを挟まずにそのまま第5曲へと続きます。第5曲は田村 薫さんのアレンジによる特別版で、オーケストラ版を基に、今回出演する全奏者による特別編成でお届けいたします。</p>
-    <p class="credit-right">編曲：田村 薫 ／ ピアノ：横山 希 ／ ヴァイオリン1st：小暮 莉加 ／ ヴァイオリン2nd：笠井 文昭 ／ ヴィオラ：由井 ひまり ／ チェロ：谷川 萌音 ／ コントラバス：山内 果連 ／ ファゴット：聶 浩軒 ／ フルート：藤枝 麻里花 ／ オーボエ：古川 瑞記 ／ クラリネット：吉村 錬 ／ ホルン：直田 真潮</p>
-  </div>
-</section>
+      <!-- 4 -->
+      <div class="piece">
+        <button class="piece-header" aria-expanded="false">
+          <div class="piece-left">
+            <div class="piece-title">4. 木管五重奏第1番《シーリューステールからの歌と踊り》第1集 作品21a（1942）</div>
+            <div class="piece-sub">Blåsekvintett nr. 1, <i>Slåtter og stev fra Siljustøl</i> Suite I, Op. 21a (1942)</div>
+          </div>
+          <svg class="caret" width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2"/></svg>
+        </button>
+        <div class="piece-body">
+          <p>　本作は戦時中に書かれた作品で…（解説本文そのまま）</p>
+          <p><strong>第1楽章 Kristi-blodsdråper</strong>（キリストの血／フクシア）…</p>
+          <p><strong>第2楽章 Dvergmålslått</strong>（山びこの歌）…</p>
+          <p><strong>第3楽章 Bå’nlåt</strong>（子守歌）…</p>
+          <p><strong>第4楽章 Kvellingsull og lokk</strong>（黄昏の歌と呼び声）…</p>
+          <p><strong>第5楽章 Marcia Siljuana</strong>（シーリューステール行進曲）…</p>
+          <ul class="performers right">
+            <li>ファゴット：聶 浩軒</li>
+            <li>フルート：藤枝 麻里花</li>
+            <li>オーボエ：古川 瑞記</li>
+            <li>クラリネット：吉村 錬</li>
+            <li>ホルン：直田 真潮</li>
+          </ul>
+        </div>
+      </div>
 
-<!-- 出演者（每人一行、左对齐） -->
-<section id="cast" class="view">
-  <div class="topbar"><button class="pill" data-go="menu">← 戻る</button></div>
-  <div class="page-card glass">
-    <div class="page-head"><h2 class="page-title">出演者およびスタッフ</h2></div>
+      <!-- 5 -->
+      <div class="piece">
+        <button class="piece-header" aria-expanded="false">
+          <div class="piece-left">
+            <div class="piece-title">5. ヴァイオリンとピアノのためのロマンス 作品23a（1942）</div>
+            <div class="piece-sub">Romanza. Versjon for fiolin og klaver, Op. 23a (1942)</div>
+          </div>
+          <svg class="caret" width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2"/></svg>
+        </button>
+        <div class="piece-body">
+          <p>　同じく戦時中に作曲された作品ですが…（解説本文そのまま）</p>
+          <ul class="performers right">
+            <li>ファゴット：聶 浩軒</li>
+            <li>ピアノ：横山 希</li>
+          </ul>
+        </div>
+      </div>
 
-    <h3>出演者</h3>
-    <p style="text-align:left">
-      ファゴット：聶 浩軒<br>
-      ピアノ：横山 希<br>
-      フルート：藤枝 麻里花<br>
-      オーボエ：古川 瑞記<br>
-      クラリネット：吉村 錬<br>
-      ホルン：直田 真潮<br>
-      ヴァイオリン1st：小暮 莉加<br>
-      ヴァイオリン2nd：笠井 文昭<br>
-      ヴィオラ：由井 ひまり<br>
-      チェロ：谷川 萌音<br>
-      コントラバス：山内 果連
-    </p>
+      <!-- 6 -->
+      <div class="piece">
+        <button class="piece-header" aria-expanded="false">
+          <div class="piece-left">
+            <div class="piece-title">6. 《シーリューステールからの歌と踊り》第2集より「クモの巣の糸の上で」作品22-4 ＆「抵抗のバラード」作品22-5（1943）</div>
+            <div class="piece-sub"><i>Slåtter og stev fra Siljustøl</i> Suite II: På kingelvevstrenger, Op. 22–4 / Kjempeviseslåtten, Op. 22–5 (1943)</div>
+          </div>
+          <svg class="caret" width="18" height="18" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="#fff" stroke-width="2"/></svg>
+        </button>
+        <div class="piece-body">
+          <p>　これら2曲は…（解説本文そのまま）</p>
+          <p>　第4曲は横山 希さんによるソロ演奏で、休みを挟まずにそのまま第5曲へと続きます。第5曲は田村 薫さんのアレンジによる特別版で、オーケストラ版を基に、今回出演する全奏者による特別編成でお届けいたします。</p>
+          <ul class="performers right">
+            <li>編曲：田村 薫</li>
+            <li>ピアノ：横山 希</li>
+            <li>ヴァイオリン1st：小暮 莉加</li>
+            <li>ヴァイオリン2nd：笠井 文昭</li>
+            <li>ヴィオラ：由井 ひまり</li>
+            <li>チェロ：谷川 萌音</li>
+            <li>コントラバス：山内 果連</li>
+            <li>ファゴット：聶 浩軒</li>
+            <li>フルート：藤枝 麻里花</li>
+            <li>オーボエ：古川 瑞記</li>
+            <li>クラリネット：吉村 錬</li>
+            <li>ホルン：直田 真潮</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <h3>スタッフ</h3>
-    <p style="text-align:left">
-      ステマネ：今村 光流<br>
-      照明：田中 陽菜<br>
-      録音：篠原 楓<br>
-      受付：奈良 彩葉<br>
-      受付：北折 衣晴
-    </p>
+  <!-- 三级：出演者 -->
+  <section class="page" id="cast">
+    <div class="topbar">
+      <button class="back-btn" data-go="menu">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        戻る
+      </button>
+    </div>
 
-    <h3>クレジット</h3>
-    <p style="text-align:left">編曲：田村 薫<br>チラシデザイン：由井 ひまり<br>曲目解説：聶 浩軒</p>
-  </div>
-</section>
+    <div class="panel fade-in">
+      <h3>出演者およびスタッフ</h3>
+      <div class="hr"></div>
+      <h4>出演者</h4>
+      <ul class="cast-list">
+        <li>ファゴット：聶 浩軒</li>
+        <li>ピアノ：横山 希</li>
+        <li>フルート：藤枝 麻里花</li>
+        <li>オーボエ：古川 瑞記</li>
+        <li>クラリネット：吉村 錬</li>
+        <li>ホルン：直田 真潮</li>
+        <li>ヴァイオリン1st：小暮 莉加</li>
+        <li>ヴァイオリン2nd：笠井 文昭</li>
+        <li>ヴィオラ：由井 ひまり</li>
+        <li>チェロ：谷川 萌音</li>
+        <li>コントラバス：山内 果連</li>
+      </ul>
+      <div class="hr"></div>
+      <h4>スタッフ</h4>
+      <ul class="cast-list">
+        <li>ステマネ：今村 光流</li>
+        <li>照明：田中 陽菜</li>
+        <li>録音：篠原 楓</li>
+        <li>受付：奈良 彩葉</li>
+        <li>受付：北折 衣晴</li>
+      </ul>
+      <div class="hr"></div>
+      <h4>制作</h4>
+      <ul class="cast-list">
+        <li>編曲：田村 薫</li>
+        <li>チラシデザイン：由井 ひまり</li>
+        <li>曲目解説：聶 浩軒</li>
+      </ul>
+    </div>
+  </section>
 
-<!-- アンケート -->
-<section id="survey" class="view">
-  <div class="topbar"><button class="pill" data-go="menu">← 戻る</button></div>
-  <div class="page-card glass">
-    <div class="page-head"><h2 class="page-title">アンケート</h2></div>
-    <p>　最後までお聴きいただき、誠にありがとうございます。<br>
-      　ご指導くださった先生方、演奏してくださった奏者の皆様、お手伝いくださったスタッフの皆様に、心より感謝申し上げます。<br>
-      　来年はセーヴェルーの戦後作品を中心に、戦中の経験を経て「レジスタンス性」がその後の音楽にどのような形で残されたのか、また成熟したセーヴェルーの作曲スタイルについても探究していく予定ですので、今回に続き、次回の演奏会にもお越しいただけましたら幸いです。
-    </p>
+  <!-- 三级：アンケート -->
+  <section class="page" id="survey">
+    <div class="topbar">
+      <button class="back-btn" data-go="menu">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14.5 5.5L8 12l6.5 6.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        戻る
+      </button>
+    </div>
 
-    <form action="https://formspree.io/f/mldonrab" method="POST" class="glass" style="padding:18px 16px; margin-top:16px;">
-      <label>お名前<br><input name="name" type="text" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.25); color:#fff;"></label><br><br>
-      <label>ご連絡先（メール）<br><input name="email" type="email" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.25); color:#fff;"></label><br><br>
-      <label>ご感想<br><textarea name="message" rows="5" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.25); color:#fff;"></textarea></label><br><br>
-      <button class="pill" type="submit">送信</button>
-    </form>
-  </div>
-</section>
+    <div class="panel fade-in">
+      <h3>アンケート</h3>
+      <p>　最後までお聴きいただき、誠にありがとうございます。ご指導くださった先生方、演奏者・スタッフの皆様に心より感謝申し上げます。来年は戦後作品を中心に、戦中経験を経た「レジスタンス性」の継承と、成熟期の作風について探究してまいります。次回もぜひお越しください。</p>
+      <form action="https://formspree.io/f/mldonrab" method="POST" style="margin-top:12px">
+        <label>お名前</label>
+        <input name="name" type="text" placeholder="" style="width:100%;margin:6px 0 14px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:#fff" />
+        <label>ご連絡先（メール等）</label>
+        <input name="contact" type="text" placeholder="" style="width:100%;margin:6px 0 14px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:#fff" />
+        <label>ご感想</label>
+        <textarea name="message" rows="6" placeholder="" style="width:100%;margin:6px 0 14px;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.25);color:#fff"></textarea>
+        <button class="pill" type="submit">送信</button>
+      </form>
+    </div>
+  </section>
 
-<footer>© 2025 聶浩軒 / Digital Program</footer>
+  <footer>© 2025 聶浩軒 / Digital Program</footer>
 
 <script>
-function openView(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const target=document.getElementById(id);
-  if(target){ target.classList.add('active'); }
-  window.scrollTo({top:0, behavior:"auto"});
-}
-document.addEventListener('click', (e)=>{
-  const btn = e.target.closest('[data-go]');
-  if(!btn) return;
-  openView(btn.getAttribute('data-go'));
-});
-window.scrollTo({top:0, behavior:"auto"});
+  // 路由切换（并确保进入后置顶且居中）
+  const go = id => {
+    document.querySelectorAll('section.page').forEach(s => s.classList.remove('active'));
+    if(id==='home'){
+      document.getElementById('home').style.display='grid';
+      document.getElementById('menu').classList.remove('active');
+      window.scrollTo({top:0, left:0, behavior:'instant'});
+      return;
+    }
+    document.getElementById('home').style.display='none';
+    const tgt = document.getElementById(id);
+    tgt.classList.add('active');
+    // 进入页面时强制回到顶部且不偏移
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({top:0,left:0,behavior:'instant'});
+  };
+
+  // 绑定按钮
+  document.querySelectorAll('[data-go]').forEach(el=>{
+    el.addEventListener('click', ()=> go(el.dataset.go));
+  });
+
+  // 初始仅显示首屏
+  go('home');
+
+  // Program 折叠
+  document.querySelectorAll('.piece-header').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const wrap = btn.closest('.piece');
+      const open = wrap.classList.contains('open');
+      // 单开关闭（可改成同时多开：移除此段）
+      document.querySelectorAll('.piece.open').forEach(p=>p.classList.remove('open'));
+      wrap.classList.toggle('open', !open);
+      btn.setAttribute('aria-expanded', String(!open));
+      // 展开后滚动使标题进入视野上方
+      if(!open){
+        setTimeout(()=> {
+          const top = wrap.getBoundingClientRect().top + window.scrollY - 80;
+          window.scrollTo({top, behavior:'smooth'});
+        }, 10);
+      }
+    });
+  });
+
+  // 防横向抖动
+  document.documentElement.style.overflowX = 'hidden';
+  document.body.style.overflowX = 'hidden';
 </script>
 </body>
 </html>
