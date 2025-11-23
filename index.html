@@ -422,7 +422,8 @@
               "div",
               {
                 className:
-                  "max-w-4xl w-full mx-auto glass-panel p-6 md:p-8 text-sm md:text-base leading-relaxed space-y-5"
+                  "max-w-4xl w-full mx-auto glass-panel p-6 md:p-8 text-sm md:text-base leading-relaxed (section === "survey" ? "" : "space-y-5")
+"
               },
               section === "start"
                 ? renderStartText()
